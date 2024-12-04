@@ -1,5 +1,6 @@
 import 'package:finops/models/staticVar.dart';
 import 'package:finops/screens/adaugaFacturi.dart';
+import 'package:finops/screens/listScreen.dart';
 import 'package:finops/widgets/alertsWidget.dart';
 import 'package:finops/widgets/notidicationsAnimationIcon.dart';
 import 'package:flutter/cupertino.dart';
@@ -329,6 +330,10 @@ class _homeScreenState extends State<homeScreen> {
             switch (item.title) {
               case 'Adauga Facturi':
                 openTab('Adauga Facturi', adaugaFacturi());
+                break;
+
+              case 'Liste' :
+                openTab('Liste', listScreen(openTabCallback: openTab,));
                 break;
 
               default:

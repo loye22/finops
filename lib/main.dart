@@ -37,6 +37,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+          splashColor: Colors.transparent, // Remove splash effect color
+          highlightColor: Colors.transparent, // Remove highlight effect color
           useMaterial3: true, colorScheme: Theme.of(context).colorScheme),
 
       home: StreamBuilder(
