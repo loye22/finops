@@ -295,45 +295,75 @@ class _listScreenState extends State<listScreen> {
 
 }
 
-// Function to create grid items with borders and colorful icons
-Widget gridItem({required String title,required IconData icon,required Color color,required VoidCallback onTap}) {
-  return MouseRegion(
-    onEnter: (_) => SystemMouseCursors.click, // Change the cursor to a hand (finger)
-    onExit: (_) => SystemMouseCursors.basic, // Change the cursor back to the default pointer
+class gridItem extends StatefulWidget {
+  final String title;
+  final IconData icon;
+  final Color color;
+  final VoidCallback onTap;
 
-    child: GestureDetector(
-      onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey.shade300, width: 2), // Light border
-          borderRadius: BorderRadius.circular(10), // Rounded corners
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Flexible(
-              child: Icon(
-                icon,
-                color: color, // Colorful icon
-                size: 40,
-              ),
-            ),
-            SizedBox(height: 10),
-            Flexible(
-              child: Text(
-                title,
-                style: TextStyle(
-                  color: staticVar.themeColor, // Text color from staticVar.themeColor
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ],
-        ),
-      ),
-    ),
-  );
+  const gridItem({
+    required this.title,
+    required this.icon,
+    required this.color,
+    required this.onTap,
+  });
+
+  @override
+  _gridItemState createState() => _gridItemState();
 }
 
+class _gridItemState extends State<gridItem> {
+  bool isHovered = false; // Track hover state
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      onEnter: (_) {
+        setState(() {
+          isHovered = true;
+        });
+      },
+      onExit: (_) {
+        setState(() {
+          isHovered = false;
+        });
+      },
+      child: GestureDetector(
+        onTap: widget.onTap,
+        child: AnimatedContainer(
+          duration: Duration(milliseconds: 200), // Smooth transition
+          decoration: BoxDecoration(
+            color: isHovered ? Colors.grey.shade200 : Colors.white, // Change background on hover
+            border: Border.all(color: Colors.grey.shade300, width: 2),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Flexible(
+                child: Icon(
+                  widget.icon,
+                  color: widget.color,
+                  size: 40,
+                ),
+              ),
+              SizedBox(height: 10),
+              Flexible(
+                child: Text(
+                  widget.title,
+                  style: TextStyle(
+                    color: staticVar.themeColor,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

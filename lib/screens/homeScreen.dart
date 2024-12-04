@@ -68,7 +68,7 @@ class _homeScreenState extends State<homeScreen> {
   @override
   Widget build(BuildContext context) {
     /// test
-  //  openTab("tabTitle", relatii());
+    //openTab("tabTitle", listScreen(openTabCallback: (a, s) {}));
 
     TabbedView tabbedView = TabbedView(
       controller: _controller,
@@ -83,7 +83,8 @@ class _homeScreenState extends State<homeScreen> {
     return AdminScaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          automaticallyImplyLeading: false,
+          // leadingWidth: 10,
+          automaticallyImplyLeading: true,
           backgroundColor: staticVar.themeColor,
           // Use your custom blue color here
           title: Row(
@@ -151,7 +152,8 @@ class _homeScreenState extends State<homeScreen> {
                   icon: Icons.group, // Icon representing a group
                   title: 'Statistici Grup',
                   route: '/s',
-                ), AdminMenuItem(
+                ),
+                AdminMenuItem(
                   icon: Icons.person,
                   title: 'Statistici Individuale',
                   route: '/s2',
@@ -163,12 +165,14 @@ class _homeScreenState extends State<homeScreen> {
               icon: Icons.work, // A more specific icon for "Operations"
               children: [
                 AdminMenuItem(
-                  icon: Icons.add_circle_outline, // To indicate adding an operation
+                  icon: Icons.add_circle_outline,
+                  // To indicate adding an operation
                   title: 'Adauga',
                   route: '/screen2',
                 ),
                 AdminMenuItem(
-                  icon: Icons.visibility, // A more intuitive icon for viewing or listing operations
+                  icon: Icons.visibility,
+                  // A more intuitive icon for viewing or listing operations
                   title: 'Vizualizeaza',
                   route: '/screen2',
                 ),
@@ -179,7 +183,8 @@ class _homeScreenState extends State<homeScreen> {
               icon: Icons.swap_horiz, // Icon representing transactions
               children: [
                 AdminMenuItem(
-                  icon: Icons.add_circle_outline, // Icon for adding transactions
+                  icon: Icons.add_circle_outline,
+                  // Icon for adding transactions
                   title: 'Adauga',
                   route: '/adauga', // Route for adding transactions
                 ),
@@ -202,13 +207,16 @@ class _homeScreenState extends State<homeScreen> {
                 AdminMenuItem(
                   icon: Icons.visibility, // Icon for viewing documents
                   title: 'Vizualizeaza',
-                  route: '/vizualizeaza_documente', // Route for viewing documents
+                  route:
+                      '/vizualizeaza_documente', // Route for viewing documents
                 ),
               ],
             ),
             AdminMenuItem(
-              title: 'Nomenclatoare', // Main menu item
-              icon: Icons.library_books, // Icon representing catalogs or directories
+              title: 'Nomenclatoare',
+              // Main menu item
+              icon: Icons.library_books,
+              // Icon representing catalogs or directories
               children: [
                 AdminMenuItem(
                   icon: Icons.business, // Icon for entities
@@ -244,7 +252,8 @@ class _homeScreenState extends State<homeScreen> {
                 AdminMenuItem(
                   icon: Icons.payments, // Icon for payments and receipts
                   title: 'Situatie Plati & Incasi',
-                  route: '/situatie_plati_incasi', // Route for payment and receipt situation
+                  route:
+                      '/situatie_plati_incasi', // Route for payment and receipt situation
                 ),
                 AdminMenuItem(
                   icon: Icons.verified_user, // Icon for SPV verification
@@ -264,12 +273,14 @@ class _homeScreenState extends State<homeScreen> {
                 AdminMenuItem(
                   icon: Icons.beach_access, // Icon for vacation registration
                   title: 'Inregistrare Concedii',
-                  route: '/inregistrare_concedii', // Route for vacation registration
+                  route:
+                      '/inregistrare_concedii', // Route for vacation registration
                 ),
                 AdminMenuItem(
                   icon: Icons.car_repair, // Icon for service registration
                   title: 'Inregistrare Service',
-                  route: '/inregistrare_service', // Route for service registration
+                  route:
+                      '/inregistrare_service', // Route for service registration
                 ),
               ],
             ),
@@ -295,7 +306,8 @@ class _homeScreenState extends State<homeScreen> {
                 AdminMenuItem(
                   icon: Icons.show_chart, // Icon for profit and loss
                   title: 'Profit / Pierdere',
-                  route: '/rapoarte_profit_pierdere', // Route for profit and loss report
+                  route:
+                      '/rapoarte_profit_pierdere', // Route for profit and loss report
                 ),
               ],
             ),
@@ -315,15 +327,6 @@ class _homeScreenState extends State<homeScreen> {
                 ),
               ],
             ),
-
-
-
-
-
-
-
-
-
           ],
           selectedRoute: '/',
           onSelected: (item) {
@@ -332,8 +335,12 @@ class _homeScreenState extends State<homeScreen> {
                 openTab('Adauga Facturi', adaugaFacturi());
                 break;
 
-              case 'Liste' :
-                openTab('Liste', listScreen(openTabCallback: openTab,));
+              case 'Liste':
+                openTab(
+                    'Liste',
+                    listScreen(
+                      openTabCallback: openTab,
+                    ));
                 break;
 
               default:
