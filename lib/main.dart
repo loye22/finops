@@ -1,3 +1,4 @@
+import 'package:finops/provider/UtilityTypeProvider.dart';
 import 'package:finops/screens/homeScreen.dart';
 import 'package:finops/screens/loginScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -18,11 +19,12 @@ Future<void> main() async {
         storageBucket: "finops-ab505.firebasestorage.app",
         messagingSenderId: "484004696644",
         appId: "1:484004696644:web:09c8f72318b43d610c2211",
-        measurementId: "G-Z65544W2T9"
-    ),
+        measurementId: "G-Z65544W2T9"),
   );
   await Firebase.initializeApp();
-  runApp(MyApp());
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (context) => UtilityTypeProvider()),
+  ], child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -39,15 +41,15 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           splashColor: Colors.transparent, // Remove splash effect color
           highlightColor: Colors.transparent, // Remove highlight effect color
-          useMaterial3: true, colorScheme: Theme.of(context).colorScheme),
-
+          useMaterial3: true,
+          colorScheme: Theme.of(context).colorScheme),
       home: StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.hasData) {
-            return  homeScreen();
+            return homeScreen();
           } else {
-            return  loginScreen();
+            return loginScreen();
           }
         },
       ),

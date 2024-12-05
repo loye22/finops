@@ -1,5 +1,6 @@
 import 'package:finops/models/staticVar.dart';
 import 'package:finops/screens/adaugaFacturi.dart';
+import 'package:finops/screens/botLVL/AnVehicul.dart';
 import 'package:finops/screens/listScreen.dart';
 import 'package:finops/widgets/alertsWidget.dart';
 import 'package:finops/widgets/notidicationsAnimationIcon.dart';
@@ -68,7 +69,7 @@ class _homeScreenState extends State<homeScreen> {
   @override
   Widget build(BuildContext context) {
     /// test
-    //openTab("tabTitle", listScreen(openTabCallback: (a, s) {}));
+    // openTab("tabTitle", AnVehicul());
 
     TabbedView tabbedView = TabbedView(
       controller: _controller,

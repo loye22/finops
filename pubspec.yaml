@@ -55,7 +55,7 @@ dependencies:
   animated_custom_dropdown: ^3.1.1
   dropdown_button2: ^2.3.9
   flutter_animate: ^4.5.2
-  syncfusion_flutter_core: ^27.2.4
+  syncfusion_flutter_core: ^27.2.5
 
 dev_dependencies:
   flutter_test:
