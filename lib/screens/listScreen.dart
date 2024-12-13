@@ -8,9 +8,9 @@ import 'package:finops/screens/botLVL/EtichetaCuvantCheie.dart';
 import 'package:finops/screens/botLVL/LocatieConsum.dart';
 import 'package:finops/screens/botLVL/MetodaPlata.dart';
 import 'package:finops/screens/botLVL/ModelVehicul.dart';
-import 'package:finops/screens/botLVL/Moneda.dart';
+import 'package:finops/screens/botLVL/MonedaUI.dart';
 import 'package:finops/screens/botLVL/NumarInmatriculareVehicul.dart';
-import 'package:finops/screens/botLVL/NumeBanca.dart';
+import 'package:finops/screens/botLVL/bankNameUI.dart';
 import 'package:finops/screens/botLVL/StatusAprobareaPlatii.dart';
 import 'package:finops/screens/botLVL/StatusPlata.dart';
 import 'package:finops/screens/botLVL/TipActivitate.dart';
@@ -18,8 +18,8 @@ import 'package:finops/screens/botLVL/TipAsigurare.dart';
 import 'package:finops/screens/botLVL/TipCalculUtilitate.dart';
 import 'package:finops/screens/botLVL/TipCitireIndex.dart';
 import 'package:finops/screens/botLVL/TipCombustibil.dart';
-import 'package:finops/screens/botLVL/TipDocument.dart';
-import 'package:finops/screens/botLVL/TipEntitate.dart';
+import 'package:finops/screens/botLVL/DocumentTypeUI.dart';
+import 'package:finops/screens/botLVL/entityTypeUI.dart';
 import 'package:finops/screens/botLVL/TipImobil.dart';
 import 'package:finops/screens/botLVL/TipPlata.dart';
 import 'package:finops/screens/botLVL/TipTaxa.dart';
@@ -68,7 +68,7 @@ class _listScreenState extends State<listScreen> {
                   icon: Icons.insert_drive_file,
                   color: Colors.green,
                   onTap: () {
-                    widget.openTabCallback('Tip Document', TipDocument());
+                    widget.openTabCallback('Tip Document', DocumentTypeUI());
                   },
                 ),
                 gridItem(
@@ -76,7 +76,7 @@ class _listScreenState extends State<listScreen> {
                   icon: Icons.business,
                   color: Colors.orange,
                   onTap: () {
-                    widget.openTabCallback('Tip Entitate', TipEntitate());
+                    widget.openTabCallback('Tip Entitate', entityTypeUI());
                   },
                 ),
                 gridItem(
@@ -84,7 +84,7 @@ class _listScreenState extends State<listScreen> {
                   icon: Icons.account_balance,
                   color: Colors.blueGrey,
                   onTap: () {
-                    widget.openTabCallback('Nume Banca', NumeBanca());
+                    widget.openTabCallback('Nume Banca', bankNameUI());
                   },
                 ),
                 gridItem(
@@ -92,7 +92,7 @@ class _listScreenState extends State<listScreen> {
                   icon: Icons.monetization_on,
                   color: Colors.amber,
                   onTap: () {
-                    widget.openTabCallback('Moneda', Moneda());
+                    widget.openTabCallback('Moneda', MonedaUI());
                   },
                 ),
                 gridItem(

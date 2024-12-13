@@ -9,14 +9,14 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:finops/models/staticVar.dart';
 
 
-class TipDocument extends StatefulWidget {
-  const TipDocument({super.key});
+class DocumentTypeUI extends StatefulWidget {
+  const DocumentTypeUI({super.key});
 
   @override
-  State<TipDocument> createState() => _TipDocumentState();
+  State<DocumentTypeUI> createState() => _DocumentTypeUIState();
 }
 
-class _TipDocumentState extends State<TipDocument> {
+class _DocumentTypeUIState extends State<DocumentTypeUI> {
   final DataGridController _dataGridController = DataGridController();
 
   @override
@@ -109,7 +109,7 @@ class _AddDocumentTypeDialogState extends State<AddDocumentTypeDialog> {
 
   void _submitForm() {
     if (_formKey.currentState?.validate() ?? false) {
-      final documentTypeName = documentTypeController.text;
+      final documentTypeName = documentTypeController.text.trim();
       // Access the DocumentTypeProvider to add the document type
       isLoading = true;
       setState(() {});
@@ -172,7 +172,7 @@ class _AddDocumentTypeDialogState extends State<AddDocumentTypeDialog> {
                     ),
                     SizedBox(width: 10),
                     CustomButton(
-                      title: "Cancel",
+                      title: "Anula",
                       backgroundColor: Colors.red,
                       textColor: Colors.white,
                       onPressed: () {

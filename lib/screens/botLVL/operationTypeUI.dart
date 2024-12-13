@@ -109,7 +109,7 @@ class _AddOperationDialogState extends State<AddOperationDialog> {
 
   void _submitForm() {
     if (_formKey.currentState?.validate() ?? false) {
-      final operationTypeName = operationTypeController.text;
+      final operationTypeName = operationTypeController.text.trim();
       // Access the OperationTypeProvider to add the operation
       isLoading = true;
       setState(() {});
@@ -165,14 +165,14 @@ class _AddOperationDialogState extends State<AddOperationDialog> {
                             ? [staticVar.loading()]
                             :  [
                           CustomButton(
-                            title: "Create",
+                            title: "Adaugă",
                             backgroundColor: staticVar.themeColor,
                             textColor: Colors.white,
                             onPressed: _submitForm,
                           ),
                           SizedBox(width: 10),
                           CustomButton(
-                            title: "Cancel",
+                            title: "Anula",
                             backgroundColor: Colors.red,
                             textColor: Colors.white,
                             onPressed: () {
