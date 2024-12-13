@@ -50,7 +50,6 @@ dependencies:
   top_snackbar_flutter: ^3.1.0
   syncfusion_flutter_datagrid: ^27.1.52
   provider: ^6.1.2
-  postgres: ^3.4.0
   http: ^1.2.2
   animated_custom_dropdown: ^3.1.1
   dropdown_button2: ^2.3.9

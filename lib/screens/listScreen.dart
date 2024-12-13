@@ -26,7 +26,7 @@ import 'package:finops/screens/botLVL/TipTaxa.dart';
 import 'package:finops/screens/botLVL/TipUtilitate.dart';
 import 'package:finops/screens/botLVL/TipVacanta.dart';
 import 'package:finops/screens/botLVL/UnitateMasura.dart';
-import 'package:finops/screens/botLVL/tipOperatiune.dart';
+import 'package:finops/screens/botLVL/operationTypeUI.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -60,7 +60,7 @@ class _listScreenState extends State<listScreen> {
                   icon: Icons.settings,
                   color: Colors.blue,
                   onTap: () {
-                    widget.openTabCallback('Tip Operatiune', tipOperatiune());
+                    widget.openTabCallback('Tip Operatiune', operationTypeUI());
                   },
                 ),
                 gridItem(

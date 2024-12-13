@@ -1,3 +1,5 @@
+import 'package:finops/provider/DocumentProvider.dart';
+import 'package:finops/provider/OperationTypeProvider.dart';
 import 'package:finops/provider/UtilityTypeProvider.dart';
 import 'package:finops/screens/homeScreen.dart';
 import 'package:finops/screens/loginScreen.dart';
@@ -23,7 +25,8 @@ Future<void> main() async {
   );
   await Firebase.initializeApp();
   runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(create: (context) => UtilityTypeProvider()),
+    ChangeNotifierProvider(create: (context) => OperationTypeProvider()),
+    ChangeNotifierProvider(create: (context) => DocumentProvider()),
   ], child: MyApp()));
 }
 

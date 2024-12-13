@@ -1,4 +1,4 @@
-import 'package:finops/provider/UtilityTypeProvider.dart';
+
 import 'package:finops/widgets/testPopUp.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +19,6 @@ class _AnVehiculState extends State<AnVehicul> {
 
   @override
   Widget build(BuildContext context) {
-    final utilityTypeProvider = Provider.of<UtilityTypeProvider>(context);
     return Scaffold(
       backgroundColor: Colors.transparent,
       floatingActionButton: FloatingActionButton(
@@ -33,32 +32,7 @@ class _AnVehiculState extends State<AnVehicul> {
           color: Colors.white,
         ),
       ),
-      body: !utilityTypeProvider.hasData
-          ? staticVar.loading()
-          : SfDataGrid(
-              controller: _dataGridController,
-              allowSorting: true,
-              allowFiltering: true,
-              columnWidthMode: ColumnWidthMode.fill,
-              source: utilityTypeProvider.utilityTypeDataSource,
-              columns: <GridColumn>[
-                GridColumn(
-                  columnName: 'utilityName',
-                  label: Container(
-
-                    alignment: Alignment.center,
-                    child: Text('Nume Utilitate'),
-                  ),
-                ),
-                GridColumn(
-                  columnName: 'utilityDescription',
-                  label: Container(
-                    alignment: Alignment.center,
-                    child: Text('Descriere Utilitate'),
-                  ),
-                ),
-              ],
-            ),
+      body: Center()
     );
   }
 }

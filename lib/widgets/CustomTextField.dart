@@ -8,6 +8,7 @@ class CustomTextField extends FormField<String> {
   final String? hint;
   final IconData hintIcon;
   final String label;
+  final int? maxChar ;
 
   CustomTextField({
     Key? key,
@@ -18,6 +19,7 @@ class CustomTextField extends FormField<String> {
     required this.textEditingController,
     FormFieldValidator<String>? validator,
     required this.label,
+    this.maxChar = 30
   }) : super(
     key: key,
     initialValue: selectedValue,
@@ -62,6 +64,7 @@ class CustomTextField extends FormField<String> {
                         SizedBox(width: 8),
                         Expanded(
                           child: TextFormField(
+                            maxLength: maxChar,
                             controller: textEditingController,
                             decoration: InputDecoration(
                               hintText: hint,
