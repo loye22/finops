@@ -1,11 +1,9 @@
 import 'package:finops/models/staticVar.dart';
 import 'package:finops/screens/adaugaFacturi.dart';
-import 'package:finops/screens/botLVL/AnVehicul.dart';
-import 'package:finops/screens/botLVL/DocumentTypeUI.dart';
-import 'package:finops/screens/botLVL/MonedaUI.dart';
-import 'package:finops/screens/botLVL/bankNameUI.dart';
-import 'package:finops/screens/botLVL/entityTypeUI.dart';
-import 'package:finops/screens/botLVL/operationTypeUI.dart';
+import 'package:finops/screens/botLVL/ActivityTypeUI.dart';
+import 'package:finops/screens/botLVL/PaymentStatusUI.dart';
+import 'package:finops/screens/botLVL/RealEstateTypeUI.dart';
+import 'package:finops/screens/botLVL/UtilityCalculationTypeUI.dart';
 import 'package:finops/screens/listScreen.dart';
 import 'package:finops/widgets/alertsWidget.dart';
 import 'package:finops/widgets/notidicationsAnimationIcon.dart';
@@ -15,6 +13,8 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_admin_scaffold/admin_scaffold.dart';
 import 'package:tabbed_view/tabbed_view.dart';
+
+import 'botLVL/IndexReadingTypeUI.dart';
 
 class homeScreen extends StatefulWidget {
   const homeScreen({super.key});
@@ -74,7 +74,7 @@ class _homeScreenState extends State<homeScreen> {
   @override
   Widget build(BuildContext context) {
     /// test
-    // openTab("tabTitle", MonedaUI());
+    openTab("tabTitle", PaymentStatusUI());
 
     TabbedView tabbedView = TabbedView(
       controller: _controller,

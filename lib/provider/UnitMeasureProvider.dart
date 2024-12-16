@@ -1,38 +1,37 @@
 import 'dart:convert';
-import 'package:finops/models/MonedaModel.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+
+import '../models/UnitMeasureModel.dart';
 import '../models/staticVar.dart';
 
-class MonedaProvider with ChangeNotifier {
-  List<MonedaModel> _monedaList = [];
-  late MonedaDataSource _monedaDataSource;
+class UnitMeasureProvider with ChangeNotifier {
+  List<UnitMeasureModel> _unitMeasureList = [];
+  late UnitMeasureDataSource _unitMeasureDataSource;
   String? _errorMessage;
   String? _successMessage;
 
-  // Getter for error message
+  // Getters
+  List<UnitMeasureModel> get unitMeasureList => _unitMeasureList;
   String? get errorMessage => _errorMessage;
-
-  // Getter for success message
   String? get successMessage => _successMessage;
+  UnitMeasureDataSource get unitMeasureDataSource => _unitMeasureDataSource;
 
-  MonedaDataSource get monedaDataSource => _monedaDataSource;
+  bool get hasData => _unitMeasureList.isNotEmpty;
 
-  bool get hasData => _monedaList.isNotEmpty;
-
-  MonedaProvider() {
-    fetchMonedaFromAPI();
+  UnitMeasureProvider() {
+    fetchUnitMeasuresFromAPI();
   }
 
-  Future<void> fetchMonedaFromAPI() async {
-    if (_monedaList.isNotEmpty) {
+  Future<void> fetchUnitMeasuresFromAPI() async {
+    if (_unitMeasureList.isNotEmpty) {
       print("Data is already loaded.");
       return;
     }
-    print("Fetching monedas...");
+    print("Fetching unit measures...");
 
     try {
-      final url = staticVar.urlAPI + 'currency/Action';
+      final url = staticVar.urlAPI + 'unit_measure/Action';
       final headers = {
         'ApplicationAccessKey': 'V2-HPwgN-t1nZA-pHXjA-5UBkc-NAVkh-vRq9F-zPDFW-WMFY1',
         'Content-Type': 'application/json',
@@ -42,19 +41,20 @@ class MonedaProvider with ChangeNotifier {
 
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
-        List<MonedaModel> monedaListHelper = [];
+        List<UnitMeasureModel> unitMeasureListHelper = [];
 
         for (var item in data) {
-          MonedaModel moneda = MonedaModel(moneda: item['currency'] ?? 'NOTFOUND',
+          UnitMeasureModel unitMeasure = UnitMeasureModel(
+            unit_measure: item['unit_measure'] ?? 'NOTFOUND',
           );
-          monedaListHelper.add(moneda);
+          unitMeasureListHelper.add(unitMeasure);
         }
 
-        _monedaList = monedaListHelper;
-        _monedaDataSource = MonedaDataSource(monedas: _monedaList);
+        _unitMeasureList = unitMeasureListHelper;
+        _unitMeasureDataSource = UnitMeasureDataSource(unitMeasures: _unitMeasureList);
         notifyListeners();
       } else {
-        throw Exception("Failed to fetch monedas.${response.body}");
+        throw Exception("Failed to fetch unit measures. ${response.body}");
       }
     } catch (e) {
       _errorMessage = e.toString();
@@ -62,30 +62,30 @@ class MonedaProvider with ChangeNotifier {
     }
   }
 
-  Future<void> addMoneda(Map<String, dynamic> data) async {
+  Future<void> addUnitMeasure(Map<String, dynamic> data) async {
     try {
-      final url = staticVar.urlAPI + 'currency/Action';
+      final url = staticVar.urlAPI + 'unit_measure/Action';
       final headers = {
         'ApplicationAccessKey': 'V2-HPwgN-t1nZA-pHXjA-5UBkc-NAVkh-vRq9F-zPDFW-WMFY1',
         'Content-Type': 'application/json',
       };
       final body = jsonEncode({
         "Action": "Add",
-        "Rows": [{'currency': data['currency']}]
+        "Rows": [{'unit_measure': data['unit_measure']}]
       });
 
       final response = await http.post(Uri.parse(url), headers: headers, body: body);
 
       if (response.statusCode == 200) {
-        MonedaModel newMoneda = MonedaModel(
-          moneda: data['currency'],
+        UnitMeasureModel newUnitMeasure = UnitMeasureModel(
+          unit_measure: data['unit_measure'],
         );
-        _monedaList.add(newMoneda);
-        _monedaDataSource = MonedaDataSource(monedas: _monedaList);
-        _successMessage = 'Moneda a fost adăugată cu succes!';
+        _unitMeasureList.add(newUnitMeasure);
+        _unitMeasureDataSource = UnitMeasureDataSource(unitMeasures: _unitMeasureList);
+        _successMessage = 'Unit measure added successfully!';
         notifyListeners();
       } else {
-        throw Exception("Failed to add moneda.${response.body}");
+        throw Exception("Failed to add unit measure. ${response.body}");
       }
     } catch (e) {
       _errorMessage = e.toString();
@@ -103,3 +103,4 @@ class MonedaProvider with ChangeNotifier {
     notifyListeners();
   }
 }
+

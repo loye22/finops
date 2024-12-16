@@ -1,38 +1,37 @@
 import 'dart:convert';
-import 'package:finops/models/MonedaModel.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+
+import '../models/PaymentTypeModel.dart';
 import '../models/staticVar.dart';
 
-class MonedaProvider with ChangeNotifier {
-  List<MonedaModel> _monedaList = [];
-  late MonedaDataSource _monedaDataSource;
+class PaymentTypeProvider with ChangeNotifier {
+  List<PaymentTypeModel> _paymentTypeList = [];
+  late PaymentTypeDataSource _paymentTypeDataSource;
   String? _errorMessage;
   String? _successMessage;
 
-  // Getter for error message
+  // Getters
+  List<PaymentTypeModel> get paymentTypeList => _paymentTypeList;
   String? get errorMessage => _errorMessage;
-
-  // Getter for success message
   String? get successMessage => _successMessage;
+  PaymentTypeDataSource get paymentTypeDataSource => _paymentTypeDataSource;
 
-  MonedaDataSource get monedaDataSource => _monedaDataSource;
+  bool get hasData => _paymentTypeList.isNotEmpty;
 
-  bool get hasData => _monedaList.isNotEmpty;
-
-  MonedaProvider() {
-    fetchMonedaFromAPI();
+  PaymentTypeProvider() {
+    fetchPaymentTypesFromAPI();
   }
 
-  Future<void> fetchMonedaFromAPI() async {
-    if (_monedaList.isNotEmpty) {
+  Future<void> fetchPaymentTypesFromAPI() async {
+    if (_paymentTypeList.isNotEmpty) {
       print("Data is already loaded.");
       return;
     }
-    print("Fetching monedas...");
+    print("Fetching payment types...");
 
     try {
-      final url = staticVar.urlAPI + 'currency/Action';
+      final url = staticVar.urlAPI + 'payment_type/Action';
       final headers = {
         'ApplicationAccessKey': 'V2-HPwgN-t1nZA-pHXjA-5UBkc-NAVkh-vRq9F-zPDFW-WMFY1',
         'Content-Type': 'application/json',
@@ -42,19 +41,20 @@ class MonedaProvider with ChangeNotifier {
 
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
-        List<MonedaModel> monedaListHelper = [];
+        List<PaymentTypeModel> paymentTypeListHelper = [];
 
         for (var item in data) {
-          MonedaModel moneda = MonedaModel(moneda: item['currency'] ?? 'NOTFOUND',
+          PaymentTypeModel paymentType = PaymentTypeModel(
+            payment_type: item['payment_type'] ?? 'NOTFOUND',
           );
-          monedaListHelper.add(moneda);
+          paymentTypeListHelper.add(paymentType);
         }
 
-        _monedaList = monedaListHelper;
-        _monedaDataSource = MonedaDataSource(monedas: _monedaList);
+        _paymentTypeList = paymentTypeListHelper;
+        _paymentTypeDataSource = PaymentTypeDataSource(paymentTypes: _paymentTypeList);
         notifyListeners();
       } else {
-        throw Exception("Failed to fetch monedas.${response.body}");
+        throw Exception("Failed to fetch payment types. ${response.body}");
       }
     } catch (e) {
       _errorMessage = e.toString();
@@ -62,30 +62,30 @@ class MonedaProvider with ChangeNotifier {
     }
   }
 
-  Future<void> addMoneda(Map<String, dynamic> data) async {
+  Future<void> addPaymentType(Map<String, dynamic> data) async {
     try {
-      final url = staticVar.urlAPI + 'currency/Action';
+      final url = staticVar.urlAPI + 'payment_type/Action';
       final headers = {
         'ApplicationAccessKey': 'V2-HPwgN-t1nZA-pHXjA-5UBkc-NAVkh-vRq9F-zPDFW-WMFY1',
         'Content-Type': 'application/json',
       };
       final body = jsonEncode({
         "Action": "Add",
-        "Rows": [{'currency': data['currency']}]
+        "Rows": [{'payment_type': data['payment_type']}]
       });
 
       final response = await http.post(Uri.parse(url), headers: headers, body: body);
 
       if (response.statusCode == 200) {
-        MonedaModel newMoneda = MonedaModel(
-          moneda: data['currency'],
+        PaymentTypeModel newPaymentType = PaymentTypeModel(
+          payment_type: data['payment_type'],
         );
-        _monedaList.add(newMoneda);
-        _monedaDataSource = MonedaDataSource(monedas: _monedaList);
-        _successMessage = 'Moneda a fost adăugată cu succes!';
+        _paymentTypeList.add(newPaymentType);
+        _paymentTypeDataSource = PaymentTypeDataSource(paymentTypes: _paymentTypeList);
+        _successMessage = 'Payment type added successfully!';
         notifyListeners();
       } else {
-        throw Exception("Failed to add moneda.${response.body}");
+        throw Exception("Failed to add payment type. ${response.body}");
       }
     } catch (e) {
       _errorMessage = e.toString();

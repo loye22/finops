@@ -1,5 +1,5 @@
-// bank_ui.dart
-import 'package:finops/provider/BankNameProvider.dart';
+// index_reading_type_ui.dart
+import 'package:finops/provider/IndexReadingTypeProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -8,14 +8,14 @@ import 'package:finops/widgets/CustomTextField.dart';
 import 'package:finops/widgets/customButton.dart';
 import 'package:finops/models/staticVar.dart';
 
-class bankNameUI extends StatefulWidget {
-  const bankNameUI({super.key});
+class IndexReadingTypeUI extends StatefulWidget {
+  const IndexReadingTypeUI({super.key});
 
   @override
-  State<bankNameUI> createState() => _bankNameUIState();
+  State<IndexReadingTypeUI> createState() => _IndexReadingTypeUIState();
 }
 
-class _bankNameUIState extends State<bankNameUI> {
+class _IndexReadingTypeUIState extends State<IndexReadingTypeUI> {
   final DataGridController _dataGridController = DataGridController();
 
   @override
@@ -23,96 +23,97 @@ class _bankNameUIState extends State<bankNameUI> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       floatingActionButton: FloatingActionButton(
-        tooltip: 'Adaugă Banca',
+        tooltip: 'Adaugă Tip Citire Index',
         backgroundColor: staticVar.themeColor,
         onPressed: () async {
-          showBankNameDialog(context);
+          showIndexReadingTypeDialog(context);
         },
         child: Icon(
           Icons.add,
           color: Colors.white,
         ),
       ),
-      body: Consumer<BankNameProvider>(
-        builder: (context, bankNameProvider, _) {
+      body: Consumer<IndexReadingTypeProvider>(
+        builder: (context, indexReadingTypeProvider, _) {
           // Check for errors and display the error dialog
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (bankNameProvider.errorMessage != null) {
+            if (indexReadingTypeProvider.errorMessage != null) {
               showDialog(
                 context: context,
                 builder: (context) => ErrorDialog(
-                  errorMessage: bankNameProvider.errorMessage!,
+                  errorMessage: indexReadingTypeProvider.errorMessage!,
                 ),
               ).then((_) {
-                bankNameProvider.clearError();
+                indexReadingTypeProvider.clearError();
               });
             }
-            if (bankNameProvider.successMessage != null) {
+            if (indexReadingTypeProvider.successMessage != null) {
               Future.delayed(Duration.zero, () {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      bankNameProvider.successMessage!,
+                      indexReadingTypeProvider.successMessage!,
                       style: TextStyle(color: Colors.white),
                     ),
                     backgroundColor: Colors.greenAccent,
                   ),
                 );
-                bankNameProvider.clearSuccessMessage();
+                indexReadingTypeProvider.clearSuccessMessage();
               });
             }
           });
 
-          return !bankNameProvider.hasData
+          return !indexReadingTypeProvider.hasData
               ? staticVar.loading()
               : SfDataGrid(
-                  controller: _dataGridController,
-                  allowSorting: true,
-                  allowFiltering: true,
-                  columnWidthMode: ColumnWidthMode.fill,
-                  source: bankNameProvider.bankNameDataSource,
-                  columns: <GridColumn>[
-                    GridColumn(
-                      columnName: 'bankName',
-                      label: Container(
-                        alignment: Alignment.center,
-                        child: Text('Nume Banca'),
-                      ),
-                    ),
-                  ],
-                );
+            controller: _dataGridController,
+            allowSorting: true,
+            allowFiltering: true,
+            columnWidthMode: ColumnWidthMode.fill,
+            source: indexReadingTypeProvider.indexReadingTypeDataSource,
+            columns: <GridColumn>[
+              GridColumn(
+                columnName: 'indexReadingType',
+                label: Container(
+                  alignment: Alignment.center,
+                  child: Text('Tip Citire Index'),
+                ),
+              ),
+            ],
+          );
         },
       ),
     );
   }
 }
 
-void showBankNameDialog(BuildContext context) {
+void showIndexReadingTypeDialog(BuildContext context) {
   showDialog(
     context: context,
     builder: (context) {
-      return AddBankNameDialog(); // Dialog to add a new bank name
+      return AddIndexReadingTypeDialog(); // Dialog to add a new index reading type
     },
   );
 }
 
-class AddBankNameDialog extends StatefulWidget {
+class AddIndexReadingTypeDialog extends StatefulWidget {
   @override
-  State<AddBankNameDialog> createState() => _AddBankNameDialogState();
+  State<AddIndexReadingTypeDialog> createState() => _AddIndexReadingTypeDialogState();
 }
 
-class _AddBankNameDialogState extends State<AddBankNameDialog> {
-  TextEditingController bankNameController = TextEditingController();
+class _AddIndexReadingTypeDialogState extends State<AddIndexReadingTypeDialog> {
+  TextEditingController indexReadingTypeController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
 
   void _submitForm() {
     if (_formKey.currentState?.validate() ?? false) {
-      final bankName = bankNameController.text.trim();
+      final indexReadingType = indexReadingTypeController.text.trim();
       isLoading = true;
       setState(() {});
-      Provider.of<BankNameProvider>(context, listen: false).addBankName({
-        'bank_name': bankName,
+      Provider.of<IndexReadingTypeProvider>(context, listen: false)
+          .addIndexReadingType({
+        'index_reading_type': indexReadingType,
       }).then((_) {
         isLoading = false;
         setState(() {});
@@ -139,12 +140,12 @@ class _AddBankNameDialogState extends State<AddBankNameDialog> {
           child: Column(
             children: [
               CustomTextField(
-                textEditingController: bankNameController,
-                label: "Nume Banca",
-                hint: 'Introduceți numele băncii',
+                textEditingController: indexReadingTypeController,
+                label: "Tip Citire Index",
+                hint: 'Introduceți tipul de citire a indexului',
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter the bank name.';
+                    return 'Please enter the index reading type.';
                   }
                   return null;
                 },
@@ -155,22 +156,22 @@ class _AddBankNameDialogState extends State<AddBankNameDialog> {
                 children: this.isLoading
                     ? [staticVar.loading()]
                     : [
-                        CustomButton(
-                          backgroundColor: staticVar.themeColor,
-                          textColor: Colors.white,
-                          title: "Adaugă",
-                          onPressed: _submitForm,
-                        ),
+                  CustomButton(
+                    backgroundColor: staticVar.themeColor,
+                    textColor: Colors.white,
+                    title: "Adaugă",
+                    onPressed: _submitForm,
+                  ),
                   SizedBox(width: 10),
                   CustomButton(
-                          title: "Anula",
-                          backgroundColor: Colors.red,
-                          textColor: Colors.white,
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ],
+                    title: "Anula",
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
               ),
             ],
           ),

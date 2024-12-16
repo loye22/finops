@@ -1,38 +1,36 @@
 import 'dart:convert';
-import 'package:finops/models/MonedaModel.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import '../models/TaxTypeModel.dart';
 import '../models/staticVar.dart';
 
-class MonedaProvider with ChangeNotifier {
-  List<MonedaModel> _monedaList = [];
-  late MonedaDataSource _monedaDataSource;
+class TaxTypeProvider with ChangeNotifier {
+  List<TaxTypeModel> _taxList = [];
+  late TaxTypeDataSource _taxTypeDataSource;
   String? _errorMessage;
   String? _successMessage;
 
-  // Getter for error message
+  // Getters
+  List<TaxTypeModel> get taxList => _taxList;
   String? get errorMessage => _errorMessage;
-
-  // Getter for success message
   String? get successMessage => _successMessage;
+  TaxTypeDataSource get taxTypeDataSource => _taxTypeDataSource;
 
-  MonedaDataSource get monedaDataSource => _monedaDataSource;
+  bool get hasData => _taxList.isNotEmpty;
 
-  bool get hasData => _monedaList.isNotEmpty;
-
-  MonedaProvider() {
-    fetchMonedaFromAPI();
+  TaxTypeProvider() {
+    fetchTaxTypesFromAPI();
   }
 
-  Future<void> fetchMonedaFromAPI() async {
-    if (_monedaList.isNotEmpty) {
+  Future<void> fetchTaxTypesFromAPI() async {
+    if (_taxList.isNotEmpty) {
       print("Data is already loaded.");
       return;
     }
-    print("Fetching monedas...");
+    print("Fetching tax types...");
 
     try {
-      final url = staticVar.urlAPI + 'currency/Action';
+      final url = staticVar.urlAPI + 'tax_type/Action';
       final headers = {
         'ApplicationAccessKey': 'V2-HPwgN-t1nZA-pHXjA-5UBkc-NAVkh-vRq9F-zPDFW-WMFY1',
         'Content-Type': 'application/json',
@@ -42,19 +40,20 @@ class MonedaProvider with ChangeNotifier {
 
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
-        List<MonedaModel> monedaListHelper = [];
+        List<TaxTypeModel> taxListHelper = [];
 
         for (var item in data) {
-          MonedaModel moneda = MonedaModel(moneda: item['currency'] ?? 'NOTFOUND',
+          TaxTypeModel tax = TaxTypeModel(
+            tax_type: item['tax_type'] ?? 'NOTFOUND',
           );
-          monedaListHelper.add(moneda);
+          taxListHelper.add(tax);
         }
 
-        _monedaList = monedaListHelper;
-        _monedaDataSource = MonedaDataSource(monedas: _monedaList);
+        _taxList = taxListHelper;
+        _taxTypeDataSource = TaxTypeDataSource(taxes: _taxList);
         notifyListeners();
       } else {
-        throw Exception("Failed to fetch monedas.${response.body}");
+        throw Exception("Failed to fetch tax types. ${response.body}");
       }
     } catch (e) {
       _errorMessage = e.toString();
@@ -62,30 +61,30 @@ class MonedaProvider with ChangeNotifier {
     }
   }
 
-  Future<void> addMoneda(Map<String, dynamic> data) async {
+  Future<void> addTaxType(Map<String, dynamic> data) async {
     try {
-      final url = staticVar.urlAPI + 'currency/Action';
+      final url = staticVar.urlAPI + 'tax_type/Action';
       final headers = {
         'ApplicationAccessKey': 'V2-HPwgN-t1nZA-pHXjA-5UBkc-NAVkh-vRq9F-zPDFW-WMFY1',
         'Content-Type': 'application/json',
       };
       final body = jsonEncode({
         "Action": "Add",
-        "Rows": [{'currency': data['currency']}]
+        "Rows": [{'tax_type': data['tax_type']}]
       });
 
       final response = await http.post(Uri.parse(url), headers: headers, body: body);
 
       if (response.statusCode == 200) {
-        MonedaModel newMoneda = MonedaModel(
-          moneda: data['currency'],
+        TaxTypeModel newTax = TaxTypeModel(
+          tax_type: data['tax_type'],
         );
-        _monedaList.add(newMoneda);
-        _monedaDataSource = MonedaDataSource(monedas: _monedaList);
-        _successMessage = 'Moneda a fost adăugată cu succes!';
+        _taxList.add(newTax);
+        _taxTypeDataSource = TaxTypeDataSource(taxes: _taxList);
+        _successMessage = 'Tax type added successfully!';
         notifyListeners();
       } else {
-        throw Exception("Failed to add moneda.${response.body}");
+        throw Exception("Failed to add tax type. ${response.body}");
       }
     } catch (e) {
       _errorMessage = e.toString();
@@ -103,3 +102,4 @@ class MonedaProvider with ChangeNotifier {
     notifyListeners();
   }
 }
+

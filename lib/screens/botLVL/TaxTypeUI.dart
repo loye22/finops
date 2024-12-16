@@ -1,5 +1,5 @@
-// bank_ui.dart
-import 'package:finops/provider/BankNameProvider.dart';
+// tax_type_ui.dart
+import 'package:finops/provider/TaxTypeProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -8,14 +8,14 @@ import 'package:finops/widgets/CustomTextField.dart';
 import 'package:finops/widgets/customButton.dart';
 import 'package:finops/models/staticVar.dart';
 
-class bankNameUI extends StatefulWidget {
-  const bankNameUI({super.key});
+class TaxTypeUI extends StatefulWidget {
+  const TaxTypeUI({super.key});
 
   @override
-  State<bankNameUI> createState() => _bankNameUIState();
+  State<TaxTypeUI> createState() => _TaxTypeUIState();
 }
 
-class _bankNameUIState extends State<bankNameUI> {
+class _TaxTypeUIState extends State<TaxTypeUI> {
   final DataGridController _dataGridController = DataGridController();
 
   @override
@@ -23,96 +23,96 @@ class _bankNameUIState extends State<bankNameUI> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       floatingActionButton: FloatingActionButton(
-        tooltip: 'Adaugă Banca',
+        tooltip: 'Adaugă Tip Taxă',
         backgroundColor: staticVar.themeColor,
         onPressed: () async {
-          showBankNameDialog(context);
+          showTaxTypeDialog(context);
         },
         child: Icon(
           Icons.add,
           color: Colors.white,
         ),
       ),
-      body: Consumer<BankNameProvider>(
-        builder: (context, bankNameProvider, _) {
+      body: Consumer<TaxTypeProvider>(
+        builder: (context, taxTypeProvider, _) {
           // Check for errors and display the error dialog
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (bankNameProvider.errorMessage != null) {
+            if (taxTypeProvider.errorMessage != null) {
               showDialog(
                 context: context,
                 builder: (context) => ErrorDialog(
-                  errorMessage: bankNameProvider.errorMessage!,
+                  errorMessage: taxTypeProvider.errorMessage!,
                 ),
               ).then((_) {
-                bankNameProvider.clearError();
+                taxTypeProvider.clearError();
               });
             }
-            if (bankNameProvider.successMessage != null) {
+            if (taxTypeProvider.successMessage != null) {
               Future.delayed(Duration.zero, () {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      bankNameProvider.successMessage!,
+                      taxTypeProvider.successMessage!,
                       style: TextStyle(color: Colors.white),
                     ),
                     backgroundColor: Colors.greenAccent,
                   ),
                 );
-                bankNameProvider.clearSuccessMessage();
+                taxTypeProvider.clearSuccessMessage();
               });
             }
           });
 
-          return !bankNameProvider.hasData
+          return !taxTypeProvider.hasData
               ? staticVar.loading()
               : SfDataGrid(
-                  controller: _dataGridController,
-                  allowSorting: true,
-                  allowFiltering: true,
-                  columnWidthMode: ColumnWidthMode.fill,
-                  source: bankNameProvider.bankNameDataSource,
-                  columns: <GridColumn>[
-                    GridColumn(
-                      columnName: 'bankName',
-                      label: Container(
-                        alignment: Alignment.center,
-                        child: Text('Nume Banca'),
-                      ),
-                    ),
-                  ],
-                );
+            controller: _dataGridController,
+            allowSorting: true,
+            allowFiltering: true,
+            columnWidthMode: ColumnWidthMode.fill,
+            source: taxTypeProvider.taxTypeDataSource,
+            columns: <GridColumn>[
+              GridColumn(
+                columnName: 'taxType',
+                label: Container(
+                  alignment: Alignment.center,
+                  child: Text('Tip Taxă'),
+                ),
+              ),
+            ],
+          );
         },
       ),
     );
   }
 }
 
-void showBankNameDialog(BuildContext context) {
+void showTaxTypeDialog(BuildContext context) {
   showDialog(
     context: context,
     builder: (context) {
-      return AddBankNameDialog(); // Dialog to add a new bank name
+      return AddTaxTypeDialog(); // Dialog to add a new tax type
     },
   );
 }
 
-class AddBankNameDialog extends StatefulWidget {
+class AddTaxTypeDialog extends StatefulWidget {
   @override
-  State<AddBankNameDialog> createState() => _AddBankNameDialogState();
+  State<AddTaxTypeDialog> createState() => _AddTaxTypeDialogState();
 }
 
-class _AddBankNameDialogState extends State<AddBankNameDialog> {
-  TextEditingController bankNameController = TextEditingController();
+class _AddTaxTypeDialogState extends State<AddTaxTypeDialog> {
+  TextEditingController taxTypeController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
 
   void _submitForm() {
     if (_formKey.currentState?.validate() ?? false) {
-      final bankName = bankNameController.text.trim();
+      final taxType = taxTypeController.text.trim();
       isLoading = true;
       setState(() {});
-      Provider.of<BankNameProvider>(context, listen: false).addBankName({
-        'bank_name': bankName,
+      Provider.of<TaxTypeProvider>(context, listen: false).addTaxType({
+        'tax_type': taxType,
       }).then((_) {
         isLoading = false;
         setState(() {});
@@ -139,12 +139,12 @@ class _AddBankNameDialogState extends State<AddBankNameDialog> {
           child: Column(
             children: [
               CustomTextField(
-                textEditingController: bankNameController,
-                label: "Nume Banca",
-                hint: 'Introduceți numele băncii',
+                textEditingController: taxTypeController,
+                label: "Tip Taxă",
+                hint: 'Introduceți tipul taxei',
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter the bank name.';
+                  if (value == null || value.trim().isEmpty) {
+                    return 'Please enter the tax type.';
                   }
                   return null;
                 },
@@ -155,22 +155,22 @@ class _AddBankNameDialogState extends State<AddBankNameDialog> {
                 children: this.isLoading
                     ? [staticVar.loading()]
                     : [
-                        CustomButton(
-                          backgroundColor: staticVar.themeColor,
-                          textColor: Colors.white,
-                          title: "Adaugă",
-                          onPressed: _submitForm,
-                        ),
+                  CustomButton(
+                    backgroundColor: staticVar.themeColor,
+                    textColor: Colors.white,
+                    title: "Adaugă",
+                    onPressed: _submitForm,
+                  ),
                   SizedBox(width: 10),
                   CustomButton(
-                          title: "Anula",
-                          backgroundColor: Colors.red,
-                          textColor: Colors.white,
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ],
+                    title: "Anula",
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
               ),
             ],
           ),

@@ -1,38 +1,37 @@
 import 'dart:convert';
-import 'package:finops/models/MonedaModel.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+
+import '../models/CategoryTagModel.dart';
 import '../models/staticVar.dart';
 
-class MonedaProvider with ChangeNotifier {
-  List<MonedaModel> _monedaList = [];
-  late MonedaDataSource _monedaDataSource;
+class CategoryTagProvider with ChangeNotifier {
+  List<CategoryTagModel> _categoryTagList = [];
+  late CategoryTagDataSource _categoryTagDataSource;
   String? _errorMessage;
   String? _successMessage;
 
-  // Getter for error message
+  // Getters
+  List<CategoryTagModel> get categoryTagList => _categoryTagList;
   String? get errorMessage => _errorMessage;
-
-  // Getter for success message
   String? get successMessage => _successMessage;
+  CategoryTagDataSource get categoryTagDataSource => _categoryTagDataSource;
 
-  MonedaDataSource get monedaDataSource => _monedaDataSource;
+  bool get hasData => _categoryTagList.isNotEmpty;
 
-  bool get hasData => _monedaList.isNotEmpty;
-
-  MonedaProvider() {
-    fetchMonedaFromAPI();
+  CategoryTagProvider() {
+    fetchCategoryTagsFromAPI();
   }
 
-  Future<void> fetchMonedaFromAPI() async {
-    if (_monedaList.isNotEmpty) {
+  Future<void> fetchCategoryTagsFromAPI() async {
+    if (_categoryTagList.isNotEmpty) {
       print("Data is already loaded.");
       return;
     }
-    print("Fetching monedas...");
+    print("Fetching category tags...");
 
     try {
-      final url = staticVar.urlAPI + 'currency/Action';
+      final url = staticVar.urlAPI + 'category_tag/Action';
       final headers = {
         'ApplicationAccessKey': 'V2-HPwgN-t1nZA-pHXjA-5UBkc-NAVkh-vRq9F-zPDFW-WMFY1',
         'Content-Type': 'application/json',
@@ -42,19 +41,20 @@ class MonedaProvider with ChangeNotifier {
 
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
-        List<MonedaModel> monedaListHelper = [];
+        List<CategoryTagModel> categoryTagListHelper = [];
 
         for (var item in data) {
-          MonedaModel moneda = MonedaModel(moneda: item['currency'] ?? 'NOTFOUND',
+          CategoryTagModel categoryTag = CategoryTagModel(
+            category_tag: item['category_tag'] ?? 'NOTFOUND',
           );
-          monedaListHelper.add(moneda);
+          categoryTagListHelper.add(categoryTag);
         }
 
-        _monedaList = monedaListHelper;
-        _monedaDataSource = MonedaDataSource(monedas: _monedaList);
+        _categoryTagList = categoryTagListHelper;
+        _categoryTagDataSource = CategoryTagDataSource(categoryTags: _categoryTagList);
         notifyListeners();
       } else {
-        throw Exception("Failed to fetch monedas.${response.body}");
+        throw Exception("Failed to fetch category tags. ${response.body}");
       }
     } catch (e) {
       _errorMessage = e.toString();
@@ -62,30 +62,30 @@ class MonedaProvider with ChangeNotifier {
     }
   }
 
-  Future<void> addMoneda(Map<String, dynamic> data) async {
+  Future<void> addCategoryTag(Map<String, dynamic> data) async {
     try {
-      final url = staticVar.urlAPI + 'currency/Action';
+      final url = staticVar.urlAPI + 'category_tag/Action';
       final headers = {
         'ApplicationAccessKey': 'V2-HPwgN-t1nZA-pHXjA-5UBkc-NAVkh-vRq9F-zPDFW-WMFY1',
         'Content-Type': 'application/json',
       };
       final body = jsonEncode({
         "Action": "Add",
-        "Rows": [{'currency': data['currency']}]
+        "Rows": [{'category_tag': data['category_tag']}]
       });
 
       final response = await http.post(Uri.parse(url), headers: headers, body: body);
 
       if (response.statusCode == 200) {
-        MonedaModel newMoneda = MonedaModel(
-          moneda: data['currency'],
+        CategoryTagModel newCategoryTag = CategoryTagModel(
+          category_tag: data['category_tag'],
         );
-        _monedaList.add(newMoneda);
-        _monedaDataSource = MonedaDataSource(monedas: _monedaList);
-        _successMessage = 'Moneda a fost adăugată cu succes!';
+        _categoryTagList.add(newCategoryTag);
+        _categoryTagDataSource = CategoryTagDataSource(categoryTags: _categoryTagList);
+        _successMessage = 'Category tag added successfully!';
         notifyListeners();
       } else {
-        throw Exception("Failed to add moneda.${response.body}");
+        throw Exception("Failed to add category tag. ${response.body}");
       }
     } catch (e) {
       _errorMessage = e.toString();

@@ -1,5 +1,5 @@
-// bank_ui.dart
-import 'package:finops/provider/BankNameProvider.dart';
+// consumption_location_ui.dart
+import 'package:finops/provider/ConsumptionLocationProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -8,14 +8,14 @@ import 'package:finops/widgets/CustomTextField.dart';
 import 'package:finops/widgets/customButton.dart';
 import 'package:finops/models/staticVar.dart';
 
-class bankNameUI extends StatefulWidget {
-  const bankNameUI({super.key});
+class ConsumptionLocationUI extends StatefulWidget {
+  const ConsumptionLocationUI({super.key});
 
   @override
-  State<bankNameUI> createState() => _bankNameUIState();
+  State<ConsumptionLocationUI> createState() => _ConsumptionLocationUIState();
 }
 
-class _bankNameUIState extends State<bankNameUI> {
+class _ConsumptionLocationUIState extends State<ConsumptionLocationUI> {
   final DataGridController _dataGridController = DataGridController();
 
   @override
@@ -23,96 +23,97 @@ class _bankNameUIState extends State<bankNameUI> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       floatingActionButton: FloatingActionButton(
-        tooltip: 'Adaugă Banca',
+        tooltip: 'Adaugă Locație Consum',
         backgroundColor: staticVar.themeColor,
         onPressed: () async {
-          showBankNameDialog(context);
+          showConsumptionLocationDialog(context);
         },
         child: Icon(
           Icons.add,
           color: Colors.white,
         ),
       ),
-      body: Consumer<BankNameProvider>(
-        builder: (context, bankNameProvider, _) {
+      body: Consumer<ConsumptionLocationProvider>(
+        builder: (context, consumptionLocationProvider, _) {
           // Check for errors and display the error dialog
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (bankNameProvider.errorMessage != null) {
+            if (consumptionLocationProvider.errorMessage != null) {
               showDialog(
                 context: context,
                 builder: (context) => ErrorDialog(
-                  errorMessage: bankNameProvider.errorMessage!,
+                  errorMessage: consumptionLocationProvider.errorMessage!,
                 ),
               ).then((_) {
-                bankNameProvider.clearError();
+                consumptionLocationProvider.clearError();
               });
             }
-            if (bankNameProvider.successMessage != null) {
+            if (consumptionLocationProvider.successMessage != null) {
               Future.delayed(Duration.zero, () {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      bankNameProvider.successMessage!,
+                      consumptionLocationProvider.successMessage!,
                       style: TextStyle(color: Colors.white),
                     ),
                     backgroundColor: Colors.greenAccent,
                   ),
                 );
-                bankNameProvider.clearSuccessMessage();
+                consumptionLocationProvider.clearSuccessMessage();
               });
             }
           });
 
-          return !bankNameProvider.hasData
+          return !consumptionLocationProvider.hasData
               ? staticVar.loading()
               : SfDataGrid(
-                  controller: _dataGridController,
-                  allowSorting: true,
-                  allowFiltering: true,
-                  columnWidthMode: ColumnWidthMode.fill,
-                  source: bankNameProvider.bankNameDataSource,
-                  columns: <GridColumn>[
-                    GridColumn(
-                      columnName: 'bankName',
-                      label: Container(
-                        alignment: Alignment.center,
-                        child: Text('Nume Banca'),
-                      ),
-                    ),
-                  ],
-                );
+            controller: _dataGridController,
+            allowSorting: true,
+            allowFiltering: true,
+            columnWidthMode: ColumnWidthMode.fill,
+            source: consumptionLocationProvider.consumptionLocationDataSource,
+            columns: <GridColumn>[
+              GridColumn(
+                columnName: 'consumptionLocation',
+                label: Container(
+                  alignment: Alignment.center,
+                  child: Text('Locație Consum'),
+                ),
+              ),
+            ],
+          );
         },
       ),
     );
   }
 }
 
-void showBankNameDialog(BuildContext context) {
+void showConsumptionLocationDialog(BuildContext context) {
   showDialog(
     context: context,
     builder: (context) {
-      return AddBankNameDialog(); // Dialog to add a new bank name
+      return AddConsumptionLocationDialog(); // Dialog to add a new consumption location
     },
   );
 }
 
-class AddBankNameDialog extends StatefulWidget {
+class AddConsumptionLocationDialog extends StatefulWidget {
   @override
-  State<AddBankNameDialog> createState() => _AddBankNameDialogState();
+  State<AddConsumptionLocationDialog> createState() => _AddConsumptionLocationDialogState();
 }
 
-class _AddBankNameDialogState extends State<AddBankNameDialog> {
-  TextEditingController bankNameController = TextEditingController();
+class _AddConsumptionLocationDialogState extends State<AddConsumptionLocationDialog> {
+  TextEditingController consumptionLocationController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
 
   void _submitForm() {
     if (_formKey.currentState?.validate() ?? false) {
-      final bankName = bankNameController.text.trim();
+      final consumptionLocation = consumptionLocationController.text.trim();
       isLoading = true;
       setState(() {});
-      Provider.of<BankNameProvider>(context, listen: false).addBankName({
-        'bank_name': bankName,
+      Provider.of<ConsumptionLocationProvider>(context, listen: false)
+          .addConsumptionLocation({
+        'consumption_location': consumptionLocation,
       }).then((_) {
         isLoading = false;
         setState(() {});
@@ -139,12 +140,12 @@ class _AddBankNameDialogState extends State<AddBankNameDialog> {
           child: Column(
             children: [
               CustomTextField(
-                textEditingController: bankNameController,
-                label: "Nume Banca",
-                hint: 'Introduceți numele băncii',
+                textEditingController: consumptionLocationController,
+                label: "Locație Consum",
+                hint: 'Introduceți locația consumului',
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter the bank name.';
+                    return 'Please enter the consumption location.';
                   }
                   return null;
                 },
@@ -155,22 +156,22 @@ class _AddBankNameDialogState extends State<AddBankNameDialog> {
                 children: this.isLoading
                     ? [staticVar.loading()]
                     : [
-                        CustomButton(
-                          backgroundColor: staticVar.themeColor,
-                          textColor: Colors.white,
-                          title: "Adaugă",
-                          onPressed: _submitForm,
-                        ),
+                  CustomButton(
+                    backgroundColor: staticVar.themeColor,
+                    textColor: Colors.white,
+                    title: "Adaugă",
+                    onPressed: _submitForm,
+                  ),
                   SizedBox(width: 10),
                   CustomButton(
-                          title: "Anula",
-                          backgroundColor: Colors.red,
-                          textColor: Colors.white,
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ],
+                    title: "Anula",
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
               ),
             ],
           ),

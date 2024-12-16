@@ -24,7 +24,7 @@ class CustomTextField extends FormField<String> {
     key: key,
     initialValue: selectedValue,
     validator: (value) {
-      if (value == null || value.isEmpty) {
+      if (value == null || value.trim().isEmpty) {
         return "Te rog să introduci o valoare";
       }
       return null;

@@ -1,38 +1,37 @@
 import 'dart:convert';
-import 'package:finops/models/MonedaModel.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+
+import '../models/BrandTagModel.dart';
 import '../models/staticVar.dart';
 
-class MonedaProvider with ChangeNotifier {
-  List<MonedaModel> _monedaList = [];
-  late MonedaDataSource _monedaDataSource;
+class BrandTagProvider with ChangeNotifier {
+  List<BrandTagModel> _brandTagList = [];
+  late BrandTagDataSource _brandTagDataSource;
   String? _errorMessage;
   String? _successMessage;
 
-  // Getter for error message
+  // Getters
+  List<BrandTagModel> get brandTagList => _brandTagList;
   String? get errorMessage => _errorMessage;
-
-  // Getter for success message
   String? get successMessage => _successMessage;
+  BrandTagDataSource get brandTagDataSource => _brandTagDataSource;
 
-  MonedaDataSource get monedaDataSource => _monedaDataSource;
+  bool get hasData => _brandTagList.isNotEmpty;
 
-  bool get hasData => _monedaList.isNotEmpty;
-
-  MonedaProvider() {
-    fetchMonedaFromAPI();
+  BrandTagProvider() {
+    fetchBrandTagsFromAPI();
   }
 
-  Future<void> fetchMonedaFromAPI() async {
-    if (_monedaList.isNotEmpty) {
+  Future<void> fetchBrandTagsFromAPI() async {
+    if (_brandTagList.isNotEmpty) {
       print("Data is already loaded.");
       return;
     }
-    print("Fetching monedas...");
+    print("Fetching brand tags...");
 
     try {
-      final url = staticVar.urlAPI + 'currency/Action';
+      final url = staticVar.urlAPI + 'brand_tag/Action';
       final headers = {
         'ApplicationAccessKey': 'V2-HPwgN-t1nZA-pHXjA-5UBkc-NAVkh-vRq9F-zPDFW-WMFY1',
         'Content-Type': 'application/json',
@@ -42,19 +41,20 @@ class MonedaProvider with ChangeNotifier {
 
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
-        List<MonedaModel> monedaListHelper = [];
+        List<BrandTagModel> brandTagListHelper = [];
 
         for (var item in data) {
-          MonedaModel moneda = MonedaModel(moneda: item['currency'] ?? 'NOTFOUND',
+          BrandTagModel brandTag = BrandTagModel(
+            brand_tag: item['brand_tag'] ?? 'NOTFOUND',
           );
-          monedaListHelper.add(moneda);
+          brandTagListHelper.add(brandTag);
         }
 
-        _monedaList = monedaListHelper;
-        _monedaDataSource = MonedaDataSource(monedas: _monedaList);
+        _brandTagList = brandTagListHelper;
+        _brandTagDataSource = BrandTagDataSource(brandTags: _brandTagList);
         notifyListeners();
       } else {
-        throw Exception("Failed to fetch monedas.${response.body}");
+        throw Exception("Failed to fetch brand tags. ${response.body}");
       }
     } catch (e) {
       _errorMessage = e.toString();
@@ -62,30 +62,30 @@ class MonedaProvider with ChangeNotifier {
     }
   }
 
-  Future<void> addMoneda(Map<String, dynamic> data) async {
+  Future<void> addBrandTag(Map<String, dynamic> data) async {
     try {
-      final url = staticVar.urlAPI + 'currency/Action';
+      final url = staticVar.urlAPI + 'brand_tag/Action';
       final headers = {
         'ApplicationAccessKey': 'V2-HPwgN-t1nZA-pHXjA-5UBkc-NAVkh-vRq9F-zPDFW-WMFY1',
         'Content-Type': 'application/json',
       };
       final body = jsonEncode({
         "Action": "Add",
-        "Rows": [{'currency': data['currency']}]
+        "Rows": [{'brand_tag': data['brand_tag']}]
       });
 
       final response = await http.post(Uri.parse(url), headers: headers, body: body);
 
       if (response.statusCode == 200) {
-        MonedaModel newMoneda = MonedaModel(
-          moneda: data['currency'],
+        BrandTagModel newBrandTag = BrandTagModel(
+          brand_tag: data['brand_tag'],
         );
-        _monedaList.add(newMoneda);
-        _monedaDataSource = MonedaDataSource(monedas: _monedaList);
-        _successMessage = 'Moneda a fost adăugată cu succes!';
+        _brandTagList.add(newBrandTag);
+        _brandTagDataSource = BrandTagDataSource(brandTags: _brandTagList);
+        _successMessage = 'Brand tag added successfully!';
         notifyListeners();
       } else {
-        throw Exception("Failed to add moneda.${response.body}");
+        throw Exception("Failed to add brand tag. ${response.body}");
       }
     } catch (e) {
       _errorMessage = e.toString();
@@ -103,3 +103,4 @@ class MonedaProvider with ChangeNotifier {
     notifyListeners();
   }
 }
+

@@ -1,5 +1,5 @@
-// bank_ui.dart
-import 'package:finops/provider/BankNameProvider.dart';
+// brand_tag_ui.dart
+import 'package:finops/provider/BrandTagProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -8,14 +8,14 @@ import 'package:finops/widgets/CustomTextField.dart';
 import 'package:finops/widgets/customButton.dart';
 import 'package:finops/models/staticVar.dart';
 
-class bankNameUI extends StatefulWidget {
-  const bankNameUI({super.key});
+class BrandTagUI extends StatefulWidget {
+  const BrandTagUI({super.key});
 
   @override
-  State<bankNameUI> createState() => _bankNameUIState();
+  State<BrandTagUI> createState() => _BrandTagUIState();
 }
 
-class _bankNameUIState extends State<bankNameUI> {
+class _BrandTagUIState extends State<BrandTagUI> {
   final DataGridController _dataGridController = DataGridController();
 
   @override
@@ -23,96 +23,97 @@ class _bankNameUIState extends State<bankNameUI> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       floatingActionButton: FloatingActionButton(
-        tooltip: 'Adaugă Banca',
+        tooltip: 'Adaugă Etichetă Brand',
         backgroundColor: staticVar.themeColor,
         onPressed: () async {
-          showBankNameDialog(context);
+          showBrandTagDialog(context);
         },
         child: Icon(
           Icons.add,
           color: Colors.white,
         ),
       ),
-      body: Consumer<BankNameProvider>(
-        builder: (context, bankNameProvider, _) {
+      body: Consumer<BrandTagProvider>(
+        builder: (context, brandTagProvider, _) {
           // Check for errors and display the error dialog
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (bankNameProvider.errorMessage != null) {
+            if (brandTagProvider.errorMessage != null) {
               showDialog(
                 context: context,
                 builder: (context) => ErrorDialog(
-                  errorMessage: bankNameProvider.errorMessage!,
+                  errorMessage: brandTagProvider.errorMessage!,
                 ),
               ).then((_) {
-                bankNameProvider.clearError();
+                brandTagProvider.clearError();
               });
             }
-            if (bankNameProvider.successMessage != null) {
+            if (brandTagProvider.successMessage != null) {
               Future.delayed(Duration.zero, () {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      bankNameProvider.successMessage!,
+                      brandTagProvider.successMessage!,
                       style: TextStyle(color: Colors.white),
                     ),
                     backgroundColor: Colors.greenAccent,
                   ),
                 );
-                bankNameProvider.clearSuccessMessage();
+                brandTagProvider.clearSuccessMessage();
               });
             }
           });
 
-          return !bankNameProvider.hasData
+          return !brandTagProvider.hasData
               ? staticVar.loading()
               : SfDataGrid(
-                  controller: _dataGridController,
-                  allowSorting: true,
-                  allowFiltering: true,
-                  columnWidthMode: ColumnWidthMode.fill,
-                  source: bankNameProvider.bankNameDataSource,
-                  columns: <GridColumn>[
-                    GridColumn(
-                      columnName: 'bankName',
-                      label: Container(
-                        alignment: Alignment.center,
-                        child: Text('Nume Banca'),
-                      ),
-                    ),
-                  ],
-                );
+            controller: _dataGridController,
+            allowSorting: true,
+            allowFiltering: true,
+            columnWidthMode: ColumnWidthMode.fill,
+            source: brandTagProvider.brandTagDataSource,
+            columns: <GridColumn>[
+              GridColumn(
+                columnName: 'brandTag',
+                label: Container(
+                  alignment: Alignment.center,
+                  child: Text('Etichetă Brand'),
+                ),
+              ),
+            ],
+          );
         },
       ),
     );
   }
 }
 
-void showBankNameDialog(BuildContext context) {
+void showBrandTagDialog(BuildContext context) {
   showDialog(
     context: context,
     builder: (context) {
-      return AddBankNameDialog(); // Dialog to add a new bank name
+      return AddBrandTagDialog(); // Dialog to add a new brand tag
     },
   );
 }
 
-class AddBankNameDialog extends StatefulWidget {
+class AddBrandTagDialog extends StatefulWidget {
   @override
-  State<AddBankNameDialog> createState() => _AddBankNameDialogState();
+  State<AddBrandTagDialog> createState() => _AddBrandTagDialogState();
 }
 
-class _AddBankNameDialogState extends State<AddBankNameDialog> {
-  TextEditingController bankNameController = TextEditingController();
+class _AddBrandTagDialogState extends State<AddBrandTagDialog> {
+  TextEditingController brandTagController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
 
   void _submitForm() {
     if (_formKey.currentState?.validate() ?? false) {
-      final bankName = bankNameController.text.trim();
+      final brandTag = brandTagController.text.trim();
       isLoading = true;
       setState(() {});
-      Provider.of<BankNameProvider>(context, listen: false).addBankName({
-        'bank_name': bankName,
+      Provider.of<BrandTagProvider>(context, listen: false)
+          .addBrandTag({
+        'brand_tag': brandTag,
       }).then((_) {
         isLoading = false;
         setState(() {});
@@ -139,12 +140,12 @@ class _AddBankNameDialogState extends State<AddBankNameDialog> {
           child: Column(
             children: [
               CustomTextField(
-                textEditingController: bankNameController,
-                label: "Nume Banca",
-                hint: 'Introduceți numele băncii',
+                textEditingController: brandTagController,
+                label: "Etichetă Brand",
+                hint: 'Introduceți eticheta brandului',
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter the bank name.';
+                    return 'Please enter the brand tag.';
                   }
                   return null;
                 },
@@ -155,22 +156,22 @@ class _AddBankNameDialogState extends State<AddBankNameDialog> {
                 children: this.isLoading
                     ? [staticVar.loading()]
                     : [
-                        CustomButton(
-                          backgroundColor: staticVar.themeColor,
-                          textColor: Colors.white,
-                          title: "Adaugă",
-                          onPressed: _submitForm,
-                        ),
+                  CustomButton(
+                    backgroundColor: staticVar.themeColor,
+                    textColor: Colors.white,
+                    title: "Adaugă",
+                    onPressed: _submitForm,
+                  ),
                   SizedBox(width: 10),
                   CustomButton(
-                          title: "Anula",
-                          backgroundColor: Colors.red,
-                          textColor: Colors.white,
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ],
+                    title: "Anula",
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
               ),
             ],
           ),

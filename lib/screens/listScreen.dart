@@ -1,31 +1,31 @@
 import 'package:finops/models/staticVar.dart';
 import 'package:finops/screens/botLVL/AnVehicul.dart';
 import 'package:finops/screens/botLVL/BrandVehicul.dart';
-import 'package:finops/screens/botLVL/ClasaDocument.dart';
-import 'package:finops/screens/botLVL/EtichetaBrand.dart';
-import 'package:finops/screens/botLVL/EtichetaCategorie.dart';
-import 'package:finops/screens/botLVL/EtichetaCuvantCheie.dart';
-import 'package:finops/screens/botLVL/LocatieConsum.dart';
-import 'package:finops/screens/botLVL/MetodaPlata.dart';
+import 'package:finops/screens/botLVL/DocumentClassUI.dart';
+import 'package:finops/screens/botLVL/BrandTagUI.dart';
+import 'package:finops/screens/botLVL/CategoryTagUI.dart';
+import 'package:finops/screens/botLVL/KeywordTagUI.dart';
+import 'package:finops/screens/botLVL/ConsumptionLocationUI.dart';
+import 'package:finops/screens/botLVL/PaymentMethodUI.dart';
 import 'package:finops/screens/botLVL/ModelVehicul.dart';
 import 'package:finops/screens/botLVL/MonedaUI.dart';
 import 'package:finops/screens/botLVL/NumarInmatriculareVehicul.dart';
 import 'package:finops/screens/botLVL/bankNameUI.dart';
 import 'package:finops/screens/botLVL/StatusAprobareaPlatii.dart';
-import 'package:finops/screens/botLVL/StatusPlata.dart';
-import 'package:finops/screens/botLVL/TipActivitate.dart';
+import 'package:finops/screens/botLVL/PaymentStatusUI.dart';
+import 'package:finops/screens/botLVL/ActivityTypeUI.dart';
 import 'package:finops/screens/botLVL/TipAsigurare.dart';
-import 'package:finops/screens/botLVL/TipCalculUtilitate.dart';
-import 'package:finops/screens/botLVL/TipCitireIndex.dart';
+import 'package:finops/screens/botLVL/UtilityCalculationTypeUI.dart';
+import 'package:finops/screens/botLVL/IndexReadingTypeUI.dart';
 import 'package:finops/screens/botLVL/TipCombustibil.dart';
 import 'package:finops/screens/botLVL/DocumentTypeUI.dart';
 import 'package:finops/screens/botLVL/entityTypeUI.dart';
-import 'package:finops/screens/botLVL/TipImobil.dart';
-import 'package:finops/screens/botLVL/TipPlata.dart';
-import 'package:finops/screens/botLVL/TipTaxa.dart';
-import 'package:finops/screens/botLVL/TipUtilitate.dart';
+import 'package:finops/screens/botLVL/RealEstateTypeUI.dart';
+import 'package:finops/screens/botLVL/PaymentTypeUI.dart';
+import 'package:finops/screens/botLVL/TaxTypeUI.dart';
+import 'package:finops/screens/botLVL/UtilityTypeUI.dart';
 import 'package:finops/screens/botLVL/TipVacanta.dart';
-import 'package:finops/screens/botLVL/UnitateMasura.dart';
+import 'package:finops/screens/botLVL/UnitMeasureUI.dart';
 import 'package:finops/screens/botLVL/operationTypeUI.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -100,7 +100,7 @@ class _listScreenState extends State<listScreen> {
                   icon: Icons.attach_money,
                   color: Colors.cyan,
                   onTap: () {
-                    widget.openTabCallback('Tip Taxa',TipTaxa());
+                    widget.openTabCallback('Tip Taxa',TaxTypeUI());
                   },
                 ),
                 gridItem(
@@ -108,7 +108,7 @@ class _listScreenState extends State<listScreen> {
                   icon: Icons.local_fire_department,
                   color: Colors.red,
                   onTap: () {
-                    widget.openTabCallback('Tip Utilitate',TipUtilitate() );
+                    widget.openTabCallback('Tip Utilitate',UtilityTypeUI() );
                   },
                 ),
                 gridItem(
@@ -116,7 +116,7 @@ class _listScreenState extends State<listScreen> {
                   icon: Icons.class_,
                   color: Colors.purple,
                   onTap: () {
-                    widget.openTabCallback('Clasa Document', ClasaDocument());
+                    widget.openTabCallback('Clasa Document', DocumentClassUI());
                   },
                 ),
                 gridItem(
@@ -124,7 +124,7 @@ class _listScreenState extends State<listScreen> {
                   icon: Icons.scale,
                   color: Colors.teal,
                   onTap: () {
-                    widget.openTabCallback('Unitate de Masura', UnitateMasura());
+                    widget.openTabCallback('Unitate de Masura', UnitMeasureUI());
                   },
                 ),
                 gridItem(
@@ -132,7 +132,7 @@ class _listScreenState extends State<listScreen> {
                   icon: Icons.payment,
                   color: Colors.indigo,
                   onTap: () {
-                    widget.openTabCallback('Metoda de Plata', MetodaPlata());
+                    widget.openTabCallback('Metoda de Plata', PaymentMethodUI());
                   },
                 ),
                 gridItem(
@@ -140,7 +140,7 @@ class _listScreenState extends State<listScreen> {
                   icon: Icons.credit_card,
                   color: Colors.blueAccent,
                   onTap: () {
-                    widget.openTabCallback('Tip Plata', TipPlata());
+                    widget.openTabCallback('Tip Plata', PaymentTypeUI());
                   },
                 ),
                 gridItem(
@@ -148,17 +148,17 @@ class _listScreenState extends State<listScreen> {
                   icon: Icons.label,
                   color: Colors.greenAccent,
                   onTap: () {
-                    widget.openTabCallback('Eticheta Categorie', EtichetaCategorie());
+                    widget.openTabCallback('Eticheta Categorie', CategoryTagUI());
                   },
                 ),
 
                 gridItem(
-                  title: 'Eticheta Brandxx',
+                  title: 'Eticheta Brand',
                   icon: Icons.branding_watermark,
                   color: Colors.blueAccent,
 
                   onTap: () {
-                    widget.openTabCallback('Eticheta Brand', EtichetaBrand());
+                    widget.openTabCallback('Eticheta Brand', BrandTagUI());
                   },
                 ),
 
@@ -167,7 +167,7 @@ class _listScreenState extends State<listScreen> {
                   icon: Icons.tag,
                   color: Colors.orangeAccent,
                   onTap: () {
-                    widget.openTabCallback('Eticheta Cuvant Cheie', EtichetaCuvantCheie());
+                    widget.openTabCallback('Eticheta Cuvant Cheie', KeywordTagUI());
                   },
                 ),
                 gridItem(
@@ -175,7 +175,7 @@ class _listScreenState extends State<listScreen> {
                   icon: Icons.location_on,
                   color: Colors.lightBlue,
                   onTap: () {
-                    widget.openTabCallback('Locatie Consum',LocatieConsum());
+                    widget.openTabCallback('Locatie Consum',ConsumptionLocationUI());
                   },
                 ),
                 gridItem(
@@ -183,7 +183,7 @@ class _listScreenState extends State<listScreen> {
                   icon: Icons.home,
                   color: Colors.blueGrey,
                   onTap: () {
-                    widget.openTabCallback('Tip Imobil',TipImobil());
+                    widget.openTabCallback('Tip Imobil',RealEstateTypeUI());
                   },
                 ),
                 gridItem(
@@ -191,7 +191,7 @@ class _listScreenState extends State<listScreen> {
                   icon: Icons.work,
                   color: Colors.purpleAccent,
                   onTap: () {
-                    widget.openTabCallback('Tip Activitate', TipActivitate());
+                    widget.openTabCallback('Tip Activitate', ActivityTypeUI());
                   },
                 ),
                 gridItem(
@@ -199,7 +199,7 @@ class _listScreenState extends State<listScreen> {
                   icon: Icons.calculate,
                   color: Colors.yellow,
                   onTap: () {
-                    widget.openTabCallback('Tip Calcul Utilitate', TipCalculUtilitate());
+                    widget.openTabCallback('Tip Calcul Utilitate', UtilityCalculationTypeUI());
                   },
                 ),
                 gridItem(
@@ -207,7 +207,7 @@ class _listScreenState extends State<listScreen> {
                   icon: Icons.search,
                   color: Colors.deepOrange,
                   onTap: () {
-                    widget.openTabCallback('Tip Citire Index', TipCitireIndex());
+                    widget.openTabCallback('Tip Citire Index', IndexReadingTypeUI());
                   },
                 ),
                 gridItem(
@@ -215,7 +215,7 @@ class _listScreenState extends State<listScreen> {
                   icon: Icons.check_circle,
                   color: Colors.green,
                   onTap: () {
-                    widget.openTabCallback('Status Plata', StatusPlata());
+                    widget.openTabCallback('Status Plata', PaymentStatusUI());
                   },
                 ),
                 gridItem(

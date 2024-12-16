@@ -1,5 +1,5 @@
-// bank_ui.dart
-import 'package:finops/provider/BankNameProvider.dart';
+// document_class_ui.dart
+import 'package:finops/provider/DocumentClassProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -8,14 +8,14 @@ import 'package:finops/widgets/CustomTextField.dart';
 import 'package:finops/widgets/customButton.dart';
 import 'package:finops/models/staticVar.dart';
 
-class bankNameUI extends StatefulWidget {
-  const bankNameUI({super.key});
+class DocumentClassUI extends StatefulWidget {
+  const DocumentClassUI({super.key});
 
   @override
-  State<bankNameUI> createState() => _bankNameUIState();
+  State<DocumentClassUI> createState() => _DocumentClassUIState();
 }
 
-class _bankNameUIState extends State<bankNameUI> {
+class _DocumentClassUIState extends State<DocumentClassUI> {
   final DataGridController _dataGridController = DataGridController();
 
   @override
@@ -23,96 +23,97 @@ class _bankNameUIState extends State<bankNameUI> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       floatingActionButton: FloatingActionButton(
-        tooltip: 'Adaugă Banca',
+        tooltip: 'Adaugă Clasă Document',
         backgroundColor: staticVar.themeColor,
         onPressed: () async {
-          showBankNameDialog(context);
+          showDocumentClassDialog(context);
         },
         child: Icon(
           Icons.add,
           color: Colors.white,
         ),
       ),
-      body: Consumer<BankNameProvider>(
-        builder: (context, bankNameProvider, _) {
+      body: Consumer<DocumentClassProvider>(
+        builder: (context, documentClassProvider, _) {
           // Check for errors and display the error dialog
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (bankNameProvider.errorMessage != null) {
+            if (documentClassProvider.errorMessage != null) {
               showDialog(
                 context: context,
                 builder: (context) => ErrorDialog(
-                  errorMessage: bankNameProvider.errorMessage!,
+                  errorMessage: documentClassProvider.errorMessage!,
                 ),
               ).then((_) {
-                bankNameProvider.clearError();
+                documentClassProvider.clearError();
               });
             }
-            if (bankNameProvider.successMessage != null) {
+            if (documentClassProvider.successMessage != null) {
               Future.delayed(Duration.zero, () {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      bankNameProvider.successMessage!,
+                      documentClassProvider.successMessage!,
                       style: TextStyle(color: Colors.white),
                     ),
                     backgroundColor: Colors.greenAccent,
                   ),
                 );
-                bankNameProvider.clearSuccessMessage();
+                documentClassProvider.clearSuccessMessage();
               });
             }
           });
 
-          return !bankNameProvider.hasData
+          return !documentClassProvider.hasData
               ? staticVar.loading()
               : SfDataGrid(
-                  controller: _dataGridController,
-                  allowSorting: true,
-                  allowFiltering: true,
-                  columnWidthMode: ColumnWidthMode.fill,
-                  source: bankNameProvider.bankNameDataSource,
-                  columns: <GridColumn>[
-                    GridColumn(
-                      columnName: 'bankName',
-                      label: Container(
-                        alignment: Alignment.center,
-                        child: Text('Nume Banca'),
-                      ),
-                    ),
-                  ],
-                );
+            controller: _dataGridController,
+            allowSorting: true,
+            allowFiltering: true,
+            columnWidthMode: ColumnWidthMode.fill,
+            source: documentClassProvider.documentClassDataSource,
+            columns: <GridColumn>[
+              GridColumn(
+                columnName: 'documentClass',
+                label: Container(
+                  alignment: Alignment.center,
+                  child: Text('Clasă Document'),
+                ),
+              ),
+            ],
+          );
         },
       ),
     );
   }
 }
 
-void showBankNameDialog(BuildContext context) {
+void showDocumentClassDialog(BuildContext context) {
   showDialog(
     context: context,
     builder: (context) {
-      return AddBankNameDialog(); // Dialog to add a new bank name
+      return AddDocumentClassDialog(); // Dialog to add a new document class
     },
   );
 }
 
-class AddBankNameDialog extends StatefulWidget {
+class AddDocumentClassDialog extends StatefulWidget {
   @override
-  State<AddBankNameDialog> createState() => _AddBankNameDialogState();
+  State<AddDocumentClassDialog> createState() => _AddDocumentClassDialogState();
 }
 
-class _AddBankNameDialogState extends State<AddBankNameDialog> {
-  TextEditingController bankNameController = TextEditingController();
+class _AddDocumentClassDialogState extends State<AddDocumentClassDialog> {
+  TextEditingController documentClassController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
 
   void _submitForm() {
     if (_formKey.currentState?.validate() ?? false) {
-      final bankName = bankNameController.text.trim();
+      final documentClass = documentClassController.text.trim();
       isLoading = true;
       setState(() {});
-      Provider.of<BankNameProvider>(context, listen: false).addBankName({
-        'bank_name': bankName,
+      Provider.of<DocumentClassProvider>(context, listen: false)
+          .addDocumentClass({
+        'document_class': documentClass,
       }).then((_) {
         isLoading = false;
         setState(() {});
@@ -139,12 +140,12 @@ class _AddBankNameDialogState extends State<AddBankNameDialog> {
           child: Column(
             children: [
               CustomTextField(
-                textEditingController: bankNameController,
-                label: "Nume Banca",
-                hint: 'Introduceți numele băncii',
+                textEditingController: documentClassController,
+                label: "Clasă Document",
+                hint: 'Introduceți numele clasei documentului',
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter the bank name.';
+                    return 'Please enter the document class.';
                   }
                   return null;
                 },
@@ -155,22 +156,22 @@ class _AddBankNameDialogState extends State<AddBankNameDialog> {
                 children: this.isLoading
                     ? [staticVar.loading()]
                     : [
-                        CustomButton(
-                          backgroundColor: staticVar.themeColor,
-                          textColor: Colors.white,
-                          title: "Adaugă",
-                          onPressed: _submitForm,
-                        ),
+                  CustomButton(
+                    backgroundColor: staticVar.themeColor,
+                    textColor: Colors.white,
+                    title: "Adaugă",
+                    onPressed: _submitForm,
+                  ),
                   SizedBox(width: 10),
                   CustomButton(
-                          title: "Anula",
-                          backgroundColor: Colors.red,
-                          textColor: Colors.white,
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ],
+                    title: "Anula",
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
               ),
             ],
           ),

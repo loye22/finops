@@ -1,38 +1,37 @@
 import 'dart:convert';
-import 'package:finops/models/MonedaModel.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+
+import '../models/KeywordTagModel.dart';
 import '../models/staticVar.dart';
 
-class MonedaProvider with ChangeNotifier {
-  List<MonedaModel> _monedaList = [];
-  late MonedaDataSource _monedaDataSource;
+class KeywordTagProvider with ChangeNotifier {
+  List<KeywordTagModel> _keywordTagList = [];
+  late KeywordTagDataSource _keywordTagDataSource;
   String? _errorMessage;
   String? _successMessage;
 
-  // Getter for error message
+  // Getters
+  List<KeywordTagModel> get keywordTagList => _keywordTagList;
   String? get errorMessage => _errorMessage;
-
-  // Getter for success message
   String? get successMessage => _successMessage;
+  KeywordTagDataSource get keywordTagDataSource => _keywordTagDataSource;
 
-  MonedaDataSource get monedaDataSource => _monedaDataSource;
+  bool get hasData => _keywordTagList.isNotEmpty;
 
-  bool get hasData => _monedaList.isNotEmpty;
-
-  MonedaProvider() {
-    fetchMonedaFromAPI();
+  KeywordTagProvider() {
+    fetchKeywordTagsFromAPI();
   }
 
-  Future<void> fetchMonedaFromAPI() async {
-    if (_monedaList.isNotEmpty) {
+  Future<void> fetchKeywordTagsFromAPI() async {
+    if (_keywordTagList.isNotEmpty) {
       print("Data is already loaded.");
       return;
     }
-    print("Fetching monedas...");
+    print("Fetching keyword tags...");
 
     try {
-      final url = staticVar.urlAPI + 'currency/Action';
+      final url = staticVar.urlAPI + 'keyword_tag/Action';
       final headers = {
         'ApplicationAccessKey': 'V2-HPwgN-t1nZA-pHXjA-5UBkc-NAVkh-vRq9F-zPDFW-WMFY1',
         'Content-Type': 'application/json',
@@ -42,19 +41,20 @@ class MonedaProvider with ChangeNotifier {
 
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
-        List<MonedaModel> monedaListHelper = [];
+        List<KeywordTagModel> keywordTagListHelper = [];
 
         for (var item in data) {
-          MonedaModel moneda = MonedaModel(moneda: item['currency'] ?? 'NOTFOUND',
+          KeywordTagModel keywordTag = KeywordTagModel(
+            keyword_tag: item['keyword_tag'] ?? 'NOTFOUND',
           );
-          monedaListHelper.add(moneda);
+          keywordTagListHelper.add(keywordTag);
         }
 
-        _monedaList = monedaListHelper;
-        _monedaDataSource = MonedaDataSource(monedas: _monedaList);
+        _keywordTagList = keywordTagListHelper;
+        _keywordTagDataSource = KeywordTagDataSource(keywordTags: _keywordTagList);
         notifyListeners();
       } else {
-        throw Exception("Failed to fetch monedas.${response.body}");
+        throw Exception("Failed to fetch keyword tags. ${response.body}");
       }
     } catch (e) {
       _errorMessage = e.toString();
@@ -62,30 +62,30 @@ class MonedaProvider with ChangeNotifier {
     }
   }
 
-  Future<void> addMoneda(Map<String, dynamic> data) async {
+  Future<void> addKeywordTag(Map<String, dynamic> data) async {
     try {
-      final url = staticVar.urlAPI + 'currency/Action';
+      final url = staticVar.urlAPI + 'keyword_tag/Action';
       final headers = {
         'ApplicationAccessKey': 'V2-HPwgN-t1nZA-pHXjA-5UBkc-NAVkh-vRq9F-zPDFW-WMFY1',
         'Content-Type': 'application/json',
       };
       final body = jsonEncode({
         "Action": "Add",
-        "Rows": [{'currency': data['currency']}]
+        "Rows": [{'keyword_tag': data['keyword_tag']}]
       });
 
       final response = await http.post(Uri.parse(url), headers: headers, body: body);
 
       if (response.statusCode == 200) {
-        MonedaModel newMoneda = MonedaModel(
-          moneda: data['currency'],
+        KeywordTagModel newKeywordTag = KeywordTagModel(
+          keyword_tag: data['keyword_tag'],
         );
-        _monedaList.add(newMoneda);
-        _monedaDataSource = MonedaDataSource(monedas: _monedaList);
-        _successMessage = 'Moneda a fost adăugată cu succes!';
+        _keywordTagList.add(newKeywordTag);
+        _keywordTagDataSource = KeywordTagDataSource(keywordTags: _keywordTagList);
+        _successMessage = 'Keyword tag added successfully!';
         notifyListeners();
       } else {
-        throw Exception("Failed to add moneda.${response.body}");
+        throw Exception("Failed to add keyword tag. ${response.body}");
       }
     } catch (e) {
       _errorMessage = e.toString();
@@ -103,3 +103,4 @@ class MonedaProvider with ChangeNotifier {
     notifyListeners();
   }
 }
+
