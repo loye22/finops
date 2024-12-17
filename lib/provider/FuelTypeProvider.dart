@@ -1,37 +1,38 @@
 import 'dart:convert';
+import 'package:finops/models/botLVL/FuelTypeModel.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import '../models/botLVL/PaymentTypeModel.dart';
+
 import '../models/staticVar.dart';
 
-class PaymentTypeProvider with ChangeNotifier {
-  List<PaymentTypeModel> _paymentTypeList = [];
-  late PaymentTypeDataSource _paymentTypeDataSource;
+class FuelTypeProvider with ChangeNotifier {
+  List<FuelTypeModel> _fuelTypeList = [];
+  late FuelTypeDataSource _fuelTypeDataSource;
   String? _errorMessage;
   String? _successMessage;
 
   // Getters
-  List<PaymentTypeModel> get paymentTypeList => _paymentTypeList;
+  List<FuelTypeModel> get fuelTypeList => _fuelTypeList;
   String? get errorMessage => _errorMessage;
   String? get successMessage => _successMessage;
-  PaymentTypeDataSource get paymentTypeDataSource => _paymentTypeDataSource;
+  FuelTypeDataSource get fuelTypeDataSource => _fuelTypeDataSource;
 
-  bool get hasData => _paymentTypeList.isNotEmpty;
+  bool get hasData => _fuelTypeList.isNotEmpty;
 
-  PaymentTypeProvider() {
-    fetchPaymentTypesFromAPI();
+  FuelTypeProvider() {
+    fetchFuelTypesFromAPI();
   }
 
-  Future<void> fetchPaymentTypesFromAPI() async {
-    if (_paymentTypeList.isNotEmpty) {
+  Future<void> fetchFuelTypesFromAPI() async {
+    if (_fuelTypeList.isNotEmpty) {
       print("Data is already loaded.");
       return;
     }
-    print("Fetching payment types...");
+    print("Fetching fuel types...");
 
     try {
-      final url = staticVar.urlAPI + 'payment_type/Action';
+      final url = staticVar.urlAPI + 'fuel_type/Action';
       final headers = {
         'ApplicationAccessKey': 'V2-HPwgN-t1nZA-pHXjA-5UBkc-NAVkh-vRq9F-zPDFW-WMFY1',
         'Content-Type': 'application/json',
@@ -41,20 +42,20 @@ class PaymentTypeProvider with ChangeNotifier {
 
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
-        List<PaymentTypeModel> paymentTypeListHelper = [];
+        List<FuelTypeModel> fuelTypeListHelper = [];
 
         for (var item in data) {
-          PaymentTypeModel paymentType = PaymentTypeModel(
-            payment_type: item['payment_type'] ?? 'NOTFOUND',
+          FuelTypeModel fuelType = FuelTypeModel(
+            fuel_type: item['fuel_type'] ?? 'NOTFOUND',
           );
-          paymentTypeListHelper.add(paymentType);
+          fuelTypeListHelper.add(fuelType);
         }
 
-        _paymentTypeList = paymentTypeListHelper;
-        _paymentTypeDataSource = PaymentTypeDataSource(paymentTypes: _paymentTypeList);
+        _fuelTypeList = fuelTypeListHelper;
+        _fuelTypeDataSource = FuelTypeDataSource(fuelTypes: _fuelTypeList);
         notifyListeners();
       } else {
-        throw Exception("Failed to fetch payment types. ${response.body}");
+        throw Exception("Failed to fetch fuel types. ${response.body}");
       }
     } catch (e) {
       _errorMessage = e.toString();
@@ -62,30 +63,30 @@ class PaymentTypeProvider with ChangeNotifier {
     }
   }
 
-  Future<void> addPaymentType(Map<String, dynamic> data) async {
+  Future<void> addFuelType(Map<String, dynamic> data) async {
     try {
-      final url = staticVar.urlAPI + 'payment_type/Action';
+      final url = staticVar.urlAPI + 'fuel_type/Action';
       final headers = {
         'ApplicationAccessKey': 'V2-HPwgN-t1nZA-pHXjA-5UBkc-NAVkh-vRq9F-zPDFW-WMFY1',
         'Content-Type': 'application/json',
       };
       final body = jsonEncode({
         "Action": "Add",
-        "Rows": [{'payment_type': data['payment_type']}]
+        "Rows": [{'fuel_type': data['fuel_type']}]
       });
 
       final response = await http.post(Uri.parse(url), headers: headers, body: body);
 
       if (response.statusCode == 200) {
-        PaymentTypeModel newPaymentType = PaymentTypeModel(
-          payment_type: data['payment_type'],
+        FuelTypeModel newFuelType = FuelTypeModel(
+          fuel_type: data['fuel_type'],
         );
-        _paymentTypeList.add(newPaymentType);
-        _paymentTypeDataSource = PaymentTypeDataSource(paymentTypes: _paymentTypeList);
-        _successMessage = 'Payment type added successfully!';
+        _fuelTypeList.add(newFuelType);
+        _fuelTypeDataSource = FuelTypeDataSource(fuelTypes: _fuelTypeList);
+        _successMessage = 'Fuel type added successfully!';
         notifyListeners();
       } else {
-        throw Exception("Failed to add payment type. ${response.body}");
+        throw Exception("Failed to add fuel type. ${response.body}");
       }
     } catch (e) {
       _errorMessage = e.toString();
@@ -103,3 +104,4 @@ class PaymentTypeProvider with ChangeNotifier {
     notifyListeners();
   }
 }
+

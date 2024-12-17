@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import '../models/CategoryTagModel.dart';
+import '../models/botLVL/CategoryTagModel.dart';
 import '../models/staticVar.dart';
 
 class CategoryTagProvider with ChangeNotifier {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-import 'package:finops/models/MonedaModel.dart';
+import 'package:finops/models/botLVL/MonedaModel.dart';
 
 class MonedaModel {
   final String moneda;

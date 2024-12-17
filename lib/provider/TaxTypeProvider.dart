@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import '../models/TaxTypeModel.dart';
+import '../models/botLVL/TaxTypeModel.dart';
 import '../models/staticVar.dart';
 
 class TaxTypeProvider with ChangeNotifier {

@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import '../models/BrandTagModel.dart';
+import '../models/botLVL/BrandTagModel.dart';
 import '../models/staticVar.dart';
 
 class BrandTagProvider with ChangeNotifier {

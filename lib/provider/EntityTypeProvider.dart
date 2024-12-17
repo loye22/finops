@@ -1,6 +1,6 @@
 // entity_provider.dart
 import 'dart:convert';
-import 'package:finops/models/EntityTypeModel.dart';
+import 'package:finops/models/botLVL/EntityTypeModel.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../models/staticVar.dart';

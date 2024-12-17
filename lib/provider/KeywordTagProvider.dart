@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import '../models/KeywordTagModel.dart';
+import '../models/botLVL/KeywordTagModel.dart';
 import '../models/staticVar.dart';
 
 class KeywordTagProvider with ChangeNotifier {

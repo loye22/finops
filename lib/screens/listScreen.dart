@@ -1,6 +1,6 @@
 import 'package:finops/models/staticVar.dart';
-import 'package:finops/screens/botLVL/AnVehicul.dart';
-import 'package:finops/screens/botLVL/BrandVehicul.dart';
+import 'package:finops/screens/botLVL/VehicleYearUI.dart';
+import 'package:finops/screens/botLVL/VehicleBrandUI.dart';
 import 'package:finops/screens/botLVL/DocumentClassUI.dart';
 import 'package:finops/screens/botLVL/BrandTagUI.dart';
 import 'package:finops/screens/botLVL/CategoryTagUI.dart';
@@ -9,22 +9,22 @@ import 'package:finops/screens/botLVL/ConsumptionLocationUI.dart';
 import 'package:finops/screens/botLVL/PaymentMethodUI.dart';
 import 'package:finops/screens/botLVL/ModelVehicul.dart';
 import 'package:finops/screens/botLVL/MonedaUI.dart';
-import 'package:finops/screens/botLVL/NumarInmatriculareVehicul.dart';
+import 'package:finops/screens/botLVL/VehicleRegistrationNumberUI.dart';
 import 'package:finops/screens/botLVL/bankNameUI.dart';
-import 'package:finops/screens/botLVL/StatusAprobareaPlatii.dart';
+import 'package:finops/screens/botLVL/PaymentApprovalStatusUI.dart';
 import 'package:finops/screens/botLVL/PaymentStatusUI.dart';
 import 'package:finops/screens/botLVL/ActivityTypeUI.dart';
-import 'package:finops/screens/botLVL/TipAsigurare.dart';
+import 'package:finops/screens/botLVL/InsuranceTypeUI.dart';
 import 'package:finops/screens/botLVL/UtilityCalculationTypeUI.dart';
 import 'package:finops/screens/botLVL/IndexReadingTypeUI.dart';
-import 'package:finops/screens/botLVL/TipCombustibil.dart';
+import 'package:finops/screens/botLVL/FuelTypeUI.dart';
 import 'package:finops/screens/botLVL/DocumentTypeUI.dart';
 import 'package:finops/screens/botLVL/entityTypeUI.dart';
 import 'package:finops/screens/botLVL/RealEstateTypeUI.dart';
 import 'package:finops/screens/botLVL/PaymentTypeUI.dart';
 import 'package:finops/screens/botLVL/TaxTypeUI.dart';
 import 'package:finops/screens/botLVL/UtilityTypeUI.dart';
-import 'package:finops/screens/botLVL/TipVacanta.dart';
+import 'package:finops/screens/botLVL/VacantionTypeUI.dart';
 import 'package:finops/screens/botLVL/UnitMeasureUI.dart';
 import 'package:finops/screens/botLVL/operationTypeUI.dart';
 import 'package:flutter/cupertino.dart';
@@ -223,7 +223,7 @@ class _listScreenState extends State<listScreen> {
                   icon: Icons.lock,
                   color: Colors.redAccent,
                   onTap: () {
-                    widget.openTabCallback('Status Aprobarea Platii',StatusAprobareaPlatii());
+                    widget.openTabCallback('Status Aprobarea Platii',PaymentApprovalStatusUI());
                   },
                 ),
                 gridItem(
@@ -231,7 +231,7 @@ class _listScreenState extends State<listScreen> {
                   icon: Icons.beach_access,
                   color: Colors.cyanAccent,
                   onTap: () {
-                    widget.openTabCallback('Tip Vacanta', TipVacanta());
+                    widget.openTabCallback('Tip Vacanta', VacantionTypeUI());
                   },
                 ),
                 gridItem(
@@ -239,7 +239,7 @@ class _listScreenState extends State<listScreen> {
                   icon: Icons.security,
                   color: Colors.blue,
                   onTap: () {
-                    widget.openTabCallback('Tip Asigurare',TipAsigurare());
+                    widget.openTabCallback('Tip Asigurare',InsuranceTypeUI());
                   },
                 ),
                 gridItem(
@@ -247,7 +247,7 @@ class _listScreenState extends State<listScreen> {
                   icon: Icons.car_repair,
                   color: Colors.green,
                   onTap: () {
-                    widget.openTabCallback('Numar Inmatriculare Vehicul', NumarInmatriculareVehicul());
+                    widget.openTabCallback('Numar Inmatriculare Vehicul', VehicleRegistrationNumberUI());
                   },
                 ),
                 gridItem(
@@ -255,7 +255,7 @@ class _listScreenState extends State<listScreen> {
                   icon: Icons.directions_car,
                   color: Colors.red,
                   onTap: () {
-                    widget.openTabCallback('Brand Vehicul',BrandVehicul());
+                    widget.openTabCallback('Brand Vehicul',VehicleBrandUI());
                   },
                 ),
                 gridItem(
@@ -271,7 +271,7 @@ class _listScreenState extends State<listScreen> {
                   icon: Icons.calendar_today,
                   color: Colors.blueGrey,
                   onTap: () {
-                    widget.openTabCallback('An Vehicul', AnVehicul());
+                    widget.openTabCallback('An Vehicul', VehicleYearUI());
                   },
                 ),
                 gridItem(
@@ -279,7 +279,7 @@ class _listScreenState extends State<listScreen> {
                   icon: Icons.local_gas_station,
                   color: Colors.amber,
                   onTap: () {
-                    widget.openTabCallback('Tip Combustibil', TipCombustibil()) ;
+                    widget.openTabCallback('Tip Combustibil', VehicleYearUI()) ;
                   },
                 ),
               ]

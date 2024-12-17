@@ -1,6 +1,6 @@
 // document_provider.dart
 import 'dart:convert';
-import 'package:finops/models/DocumentModel.dart';
+import 'package:finops/models/botLVL/DocumentModel.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 

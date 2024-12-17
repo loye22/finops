@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import '../models/DocumentClassModel.dart';
+import '../models/botLVL/DocumentClassModel.dart';
 import '../models/staticVar.dart';
 
 class DocumentClassProvider with ChangeNotifier {

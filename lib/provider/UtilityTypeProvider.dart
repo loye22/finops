@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import '../models/UtilityTypeModel.dart';
+import '../models/botLVL/UtilityTypeModel.dart';
 import '../models/staticVar.dart';
 
 class UtilityTypeProvider with ChangeNotifier {

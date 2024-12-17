@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:finops/models/MonedaModel.dart';
+import 'package:finops/models/botLVL/MonedaModel.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../models/staticVar.dart';

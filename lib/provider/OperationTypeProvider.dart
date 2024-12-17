@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:finops/models/OperationTypeModel.dart';
+import 'package:finops/models/botLVL/OperationTypeModel.dart';
 import 'package:finops/models/staticVar.dart';
 import 'package:finops/widgets/ErrorDialog.dart';
 import 'package:flutter/material.dart';

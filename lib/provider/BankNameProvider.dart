@@ -1,6 +1,6 @@
 // bank_provider.dart
 import 'dart:convert';
-import 'package:finops/models/BankNameModel.dart';
+import 'package:finops/models/botLVL/BankNameModel.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 

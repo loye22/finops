@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import '../models/PaymentMethodModel.dart';
+import '../models/botLVL/PaymentMethodModel.dart';
 import '../models/staticVar.dart';
 
 class PaymentMethodProvider with ChangeNotifier {

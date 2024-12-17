@@ -1,37 +1,38 @@
 import 'dart:convert';
+import 'package:finops/models/botLVL/VehicleYearModel.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import '../models/botLVL/PaymentTypeModel.dart';
+
 import '../models/staticVar.dart';
 
-class PaymentTypeProvider with ChangeNotifier {
-  List<PaymentTypeModel> _paymentTypeList = [];
-  late PaymentTypeDataSource _paymentTypeDataSource;
+class VehicleYearProvider with ChangeNotifier {
+  List<VehicleYearModel> _vehicleYearList = [];
+  late VehicleYearDataSource _vehicleYearDataSource;
   String? _errorMessage;
   String? _successMessage;
 
   // Getters
-  List<PaymentTypeModel> get paymentTypeList => _paymentTypeList;
+  List<VehicleYearModel> get vehicleYearList => _vehicleYearList;
   String? get errorMessage => _errorMessage;
   String? get successMessage => _successMessage;
-  PaymentTypeDataSource get paymentTypeDataSource => _paymentTypeDataSource;
+  VehicleYearDataSource get vehicleYearDataSource => _vehicleYearDataSource;
 
-  bool get hasData => _paymentTypeList.isNotEmpty;
+  bool get hasData => _vehicleYearList.isNotEmpty;
 
-  PaymentTypeProvider() {
-    fetchPaymentTypesFromAPI();
+  VehicleYearProvider() {
+    fetchVehicleYearsFromAPI();
   }
 
-  Future<void> fetchPaymentTypesFromAPI() async {
-    if (_paymentTypeList.isNotEmpty) {
+  Future<void> fetchVehicleYearsFromAPI() async {
+    if (_vehicleYearList.isNotEmpty) {
       print("Data is already loaded.");
       return;
     }
-    print("Fetching payment types...");
+    print("Fetching vehicle years...");
 
     try {
-      final url = staticVar.urlAPI + 'payment_type/Action';
+      final url = staticVar.urlAPI + 'vehicle_year/Action';
       final headers = {
         'ApplicationAccessKey': 'V2-HPwgN-t1nZA-pHXjA-5UBkc-NAVkh-vRq9F-zPDFW-WMFY1',
         'Content-Type': 'application/json',
@@ -41,20 +42,20 @@ class PaymentTypeProvider with ChangeNotifier {
 
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
-        List<PaymentTypeModel> paymentTypeListHelper = [];
+        List<VehicleYearModel> vehicleYearListHelper = [];
 
         for (var item in data) {
-          PaymentTypeModel paymentType = PaymentTypeModel(
-            payment_type: item['payment_type'] ?? 'NOTFOUND',
+          VehicleYearModel vehicleYear = VehicleYearModel(
+            vehicle_year: item['vehicle_year'] ?? 'NOTFOUND',
           );
-          paymentTypeListHelper.add(paymentType);
+          vehicleYearListHelper.add(vehicleYear);
         }
 
-        _paymentTypeList = paymentTypeListHelper;
-        _paymentTypeDataSource = PaymentTypeDataSource(paymentTypes: _paymentTypeList);
+        _vehicleYearList = vehicleYearListHelper;
+        _vehicleYearDataSource = VehicleYearDataSource(vehicleYears: _vehicleYearList);
         notifyListeners();
       } else {
-        throw Exception("Failed to fetch payment types. ${response.body}");
+        throw Exception("Failed to fetch vehicle years. ${response.body}");
       }
     } catch (e) {
       _errorMessage = e.toString();
@@ -62,30 +63,30 @@ class PaymentTypeProvider with ChangeNotifier {
     }
   }
 
-  Future<void> addPaymentType(Map<String, dynamic> data) async {
+  Future<void> addVehicleYear(Map<String, dynamic> data) async {
     try {
-      final url = staticVar.urlAPI + 'payment_type/Action';
+      final url = staticVar.urlAPI + 'vehicle_year/Action';
       final headers = {
         'ApplicationAccessKey': 'V2-HPwgN-t1nZA-pHXjA-5UBkc-NAVkh-vRq9F-zPDFW-WMFY1',
         'Content-Type': 'application/json',
       };
       final body = jsonEncode({
         "Action": "Add",
-        "Rows": [{'payment_type': data['payment_type']}]
+        "Rows": [{'vehicle_year': data['vehicle_year']}]
       });
 
       final response = await http.post(Uri.parse(url), headers: headers, body: body);
 
       if (response.statusCode == 200) {
-        PaymentTypeModel newPaymentType = PaymentTypeModel(
-          payment_type: data['payment_type'],
+        VehicleYearModel newVehicleYear = VehicleYearModel(
+          vehicle_year: data['vehicle_year'],
         );
-        _paymentTypeList.add(newPaymentType);
-        _paymentTypeDataSource = PaymentTypeDataSource(paymentTypes: _paymentTypeList);
-        _successMessage = 'Payment type added successfully!';
+        _vehicleYearList.add(newVehicleYear);
+        _vehicleYearDataSource = VehicleYearDataSource(vehicleYears: _vehicleYearList);
+        _successMessage = 'Vehicle year added successfully!';
         notifyListeners();
       } else {
-        throw Exception("Failed to add payment type. ${response.body}");
+        throw Exception("Failed to add vehicle year. ${response.body}");
       }
     } catch (e) {
       _errorMessage = e.toString();
@@ -103,3 +104,4 @@ class PaymentTypeProvider with ChangeNotifier {
     notifyListeners();
   }
 }
+
