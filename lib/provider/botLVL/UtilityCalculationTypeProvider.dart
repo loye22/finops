@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import '../models/botLVL/UtilityCalculationTypeModel.dart';
-import '../models/staticVar.dart';
+import '../../models/botLVL/UtilityCalculationTypeModel.dart';
+import '../../models/staticVar.dart';
 
 class UtilityCalculationTypeProvider with ChangeNotifier {
   List<UtilityCalculationTypeModel> _utilityCalculationTypeList = [];

@@ -5,7 +5,7 @@ import 'package:finops/widgets/ErrorDialog.dart';
 import 'package:finops/widgets/CustomTextField.dart';
 import 'package:finops/widgets/customButton.dart';
 import 'package:finops/models/staticVar.dart';
-import 'package:finops/provider/MonedaProvider.dart';  // Make sure you import your provider
+import 'package:finops/provider/botLVL/MonedaProvider.dart';  // Make sure you import your provider
 
 class MonedaUI extends StatefulWidget {
   const MonedaUI({super.key});

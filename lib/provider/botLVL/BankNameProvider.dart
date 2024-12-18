@@ -4,7 +4,7 @@ import 'package:finops/models/botLVL/BankNameModel.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import '../models/staticVar.dart';
+import '../../models/staticVar.dart';
 
 class BankNameProvider with ChangeNotifier {
   List<BankNameModel> _bankList = [];

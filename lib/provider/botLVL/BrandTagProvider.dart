@@ -1,36 +1,37 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import '../models/botLVL/TaxTypeModel.dart';
-import '../models/staticVar.dart';
 
-class TaxTypeProvider with ChangeNotifier {
-  List<TaxTypeModel> _taxList = [];
-  late TaxTypeDataSource _taxTypeDataSource;
+import '../../models/botLVL/BrandTagModel.dart';
+import '../../models/staticVar.dart';
+
+class BrandTagProvider with ChangeNotifier {
+  List<BrandTagModel> _brandTagList = [];
+  late BrandTagDataSource _brandTagDataSource;
   String? _errorMessage;
   String? _successMessage;
 
   // Getters
-  List<TaxTypeModel> get taxList => _taxList;
+  List<BrandTagModel> get brandTagList => _brandTagList;
   String? get errorMessage => _errorMessage;
   String? get successMessage => _successMessage;
-  TaxTypeDataSource get taxTypeDataSource => _taxTypeDataSource;
+  BrandTagDataSource get brandTagDataSource => _brandTagDataSource;
 
-  bool get hasData => _taxList.isNotEmpty;
+  bool get hasData => _brandTagList.isNotEmpty;
 
-  TaxTypeProvider() {
-    fetchTaxTypesFromAPI();
+  BrandTagProvider() {
+    fetchBrandTagsFromAPI();
   }
 
-  Future<void> fetchTaxTypesFromAPI() async {
-    if (_taxList.isNotEmpty) {
+  Future<void> fetchBrandTagsFromAPI() async {
+    if (_brandTagList.isNotEmpty) {
       print("Data is already loaded.");
       return;
     }
-    print("Fetching tax types...");
+    print("Fetching brand tags...");
 
     try {
-      final url = staticVar.urlAPI + 'tax_type/Action';
+      final url = staticVar.urlAPI + 'brand_tag/Action';
       final headers = {
         'ApplicationAccessKey': 'V2-HPwgN-t1nZA-pHXjA-5UBkc-NAVkh-vRq9F-zPDFW-WMFY1',
         'Content-Type': 'application/json',
@@ -40,20 +41,20 @@ class TaxTypeProvider with ChangeNotifier {
 
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
-        List<TaxTypeModel> taxListHelper = [];
+        List<BrandTagModel> brandTagListHelper = [];
 
         for (var item in data) {
-          TaxTypeModel tax = TaxTypeModel(
-            tax_type: item['tax_type'] ?? 'NOTFOUND',
+          BrandTagModel brandTag = BrandTagModel(
+            brand_tag: item['brand_tag'] ?? 'NOTFOUND',
           );
-          taxListHelper.add(tax);
+          brandTagListHelper.add(brandTag);
         }
 
-        _taxList = taxListHelper;
-        _taxTypeDataSource = TaxTypeDataSource(taxes: _taxList);
+        _brandTagList = brandTagListHelper;
+        _brandTagDataSource = BrandTagDataSource(brandTags: _brandTagList);
         notifyListeners();
       } else {
-        throw Exception("Failed to fetch tax types. ${response.body}");
+        throw Exception("Failed to fetch brand tags. ${response.body}");
       }
     } catch (e) {
       _errorMessage = e.toString();
@@ -61,30 +62,30 @@ class TaxTypeProvider with ChangeNotifier {
     }
   }
 
-  Future<void> addTaxType(Map<String, dynamic> data) async {
+  Future<void> addBrandTag(Map<String, dynamic> data) async {
     try {
-      final url = staticVar.urlAPI + 'tax_type/Action';
+      final url = staticVar.urlAPI + 'brand_tag/Action';
       final headers = {
         'ApplicationAccessKey': 'V2-HPwgN-t1nZA-pHXjA-5UBkc-NAVkh-vRq9F-zPDFW-WMFY1',
         'Content-Type': 'application/json',
       };
       final body = jsonEncode({
         "Action": "Add",
-        "Rows": [{'tax_type': data['tax_type']}]
+        "Rows": [{'brand_tag': data['brand_tag']}]
       });
 
       final response = await http.post(Uri.parse(url), headers: headers, body: body);
 
       if (response.statusCode == 200) {
-        TaxTypeModel newTax = TaxTypeModel(
-          tax_type: data['tax_type'],
+        BrandTagModel newBrandTag = BrandTagModel(
+          brand_tag: data['brand_tag'],
         );
-        _taxList.add(newTax);
-        _taxTypeDataSource = TaxTypeDataSource(taxes: _taxList);
-        _successMessage = 'Tax type added successfully!';
+        _brandTagList.add(newBrandTag);
+        _brandTagDataSource = BrandTagDataSource(brandTags: _brandTagList);
+        _successMessage = 'Brand tag added successfully!';
         notifyListeners();
       } else {
-        throw Exception("Failed to add tax type. ${response.body}");
+        throw Exception("Failed to add brand tag. ${response.body}");
       }
     } catch (e) {
       _errorMessage = e.toString();

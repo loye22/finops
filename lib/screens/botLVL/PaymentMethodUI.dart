@@ -1,5 +1,5 @@
 // payment_method_ui.dart
-import 'package:finops/provider/PaymentMethodProvider.dart';
+import 'package:finops/provider/botLVL/PaymentMethodProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';

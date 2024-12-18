@@ -1,5 +1,5 @@
 // real_estate_type_ui.dart
-import 'package:finops/provider/RealEstateTypeProvider.dart';
+import 'package:finops/provider/botLVL/RealEstateTypeProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';

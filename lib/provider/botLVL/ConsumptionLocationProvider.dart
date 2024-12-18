@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import '../models/botLVL/ConsumptionLocationModel.dart';
-import '../models/staticVar.dart';
+import '../../models/botLVL/ConsumptionLocationModel.dart';
+import '../../models/staticVar.dart';
 
 class ConsumptionLocationProvider with ChangeNotifier {
   List<ConsumptionLocationModel> _consumptionLocationList = [];

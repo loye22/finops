@@ -3,7 +3,7 @@ import 'package:finops/models/botLVL/VehicleBrandModel.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import '../models/staticVar.dart';
+import '../../models/staticVar.dart';
 
 class VehicleBrandProvider with ChangeNotifier {
   List<VehicleBrandModel> _vehicleBrandList = [];

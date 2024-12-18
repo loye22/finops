@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import '../models/botLVL/VehicleRegistrationNumberModel.dart';
-import '../models/staticVar.dart';
+import '../../models/botLVL/VehicleRegistrationNumberModel.dart';
+import '../../models/staticVar.dart';
 
 class VehicleRegistrationNumberProvider with ChangeNotifier {
   List<VehicleRegistrationNumberModel> _vehicleRegistrationNumberList = [];

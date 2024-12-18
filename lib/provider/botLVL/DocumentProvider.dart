@@ -1,38 +1,41 @@
+// document_provider.dart
 import 'dart:convert';
-import 'package:finops/models/botLVL/FuelTypeModel.dart';
+import 'package:finops/models/botLVL/DocumentModel.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import '../../models/staticVar.dart';
 
-import '../models/staticVar.dart';
 
-class FuelTypeProvider with ChangeNotifier {
-  List<FuelTypeModel> _fuelTypeList = [];
-  late FuelTypeDataSource _fuelTypeDataSource;
+class DocumentProvider with ChangeNotifier {
+  List<DocumentModel> _documentsList = [];
+  late DocumentDataSource _documentDataSource;
   String? _errorMessage;
   String? _successMessage;
 
-  // Getters
-  List<FuelTypeModel> get fuelTypeList => _fuelTypeList;
+  // Getter for error message
   String? get errorMessage => _errorMessage;
+
+  // Getter for success message
   String? get successMessage => _successMessage;
-  FuelTypeDataSource get fuelTypeDataSource => _fuelTypeDataSource;
 
-  bool get hasData => _fuelTypeList.isNotEmpty;
+  DocumentDataSource get documentDataSource => _documentDataSource;
 
-  FuelTypeProvider() {
-    fetchFuelTypesFromAPI();
+  bool get hasData => _documentsList.isNotEmpty;
+
+  DocumentProvider() {
+    fetchDocumentsFromAPI();
   }
 
-  Future<void> fetchFuelTypesFromAPI() async {
-    if (_fuelTypeList.isNotEmpty) {
+  Future<void> fetchDocumentsFromAPI() async {
+    if (_documentsList.isNotEmpty) {
       print("Data is already loaded.");
       return;
     }
-    print("Fetching fuel types...");
+    print("Fetching documents...");
 
     try {
-      final url = staticVar.urlAPI + 'fuel_type/Action';
+      final url = staticVar.urlAPI + 'document_type/Action';
       final headers = {
         'ApplicationAccessKey': 'V2-HPwgN-t1nZA-pHXjA-5UBkc-NAVkh-vRq9F-zPDFW-WMFY1',
         'Content-Type': 'application/json',
@@ -42,20 +45,20 @@ class FuelTypeProvider with ChangeNotifier {
 
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
-        List<FuelTypeModel> fuelTypeListHelper = [];
+        List<DocumentModel> documentsListHelper = [];
 
         for (var item in data) {
-          FuelTypeModel fuelType = FuelTypeModel(
-            fuel_type: item['fuel_type'] ?? 'NOTFOUND',
+          DocumentModel document = DocumentModel(
+            document_type: item['document_type'] ?? 'NOTFOUND',
           );
-          fuelTypeListHelper.add(fuelType);
+          documentsListHelper.add(document);
         }
 
-        _fuelTypeList = fuelTypeListHelper;
-        _fuelTypeDataSource = FuelTypeDataSource(fuelTypes: _fuelTypeList);
+        _documentsList = documentsListHelper;
+        _documentDataSource = DocumentDataSource(documents: _documentsList);
         notifyListeners();
       } else {
-        throw Exception("Failed to fetch fuel types. ${response.body}");
+        throw Exception("Failed to fetch documents.${response.body}");
       }
     } catch (e) {
       _errorMessage = e.toString();
@@ -63,30 +66,30 @@ class FuelTypeProvider with ChangeNotifier {
     }
   }
 
-  Future<void> addFuelType(Map<String, dynamic> data) async {
+  Future<void> addDocument(Map<String, dynamic> data) async {
     try {
-      final url = staticVar.urlAPI + 'fuel_type/Action';
+      final url = staticVar.urlAPI + 'document_type/Action';
       final headers = {
         'ApplicationAccessKey': 'V2-HPwgN-t1nZA-pHXjA-5UBkc-NAVkh-vRq9F-zPDFW-WMFY1',
         'Content-Type': 'application/json',
       };
       final body = jsonEncode({
         "Action": "Add",
-        "Rows": [{'fuel_type': data['fuel_type']}]
+        "Rows": [{'document_type': data['document_type']}]
       });
 
       final response = await http.post(Uri.parse(url), headers: headers, body: body);
 
       if (response.statusCode == 200) {
-        FuelTypeModel newFuelType = FuelTypeModel(
-          fuel_type: data['fuel_type'],
+        DocumentModel newDocument = DocumentModel(
+          document_type: data['document_type'],
         );
-        _fuelTypeList.add(newFuelType);
-        _fuelTypeDataSource = FuelTypeDataSource(fuelTypes: _fuelTypeList);
-        _successMessage = 'Fuel type added successfully!';
+        _documentsList.add(newDocument);
+        _documentDataSource = DocumentDataSource(documents: _documentsList);
+        _successMessage = 'Document added successfully!';
         notifyListeners();
       } else {
-        throw Exception("Failed to add fuel type. ${response.body}");
+        throw Exception("Failed to add document.${response.body}");
       }
     } catch (e) {
       _errorMessage = e.toString();
@@ -104,4 +107,3 @@ class FuelTypeProvider with ChangeNotifier {
     notifyListeners();
   }
 }
-

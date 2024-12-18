@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 
-import '../models/staticVar.dart';
+import '../../models/staticVar.dart';
 
 class VehicleYearProvider with ChangeNotifier {
   List<VehicleYearModel> _vehicleYearList = [];

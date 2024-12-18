@@ -1,5 +1,5 @@
 // consumption_location_ui.dart
-import 'package:finops/provider/ConsumptionLocationProvider.dart';
+import 'package:finops/provider/botLVL/ConsumptionLocationProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';

@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import '../models/botLVL/PaymentMethodModel.dart';
-import '../models/staticVar.dart';
+import '../../models/botLVL/PaymentMethodModel.dart';
+import '../../models/staticVar.dart';
 
 class PaymentMethodProvider with ChangeNotifier {
   List<PaymentMethodModel> _paymentMethodList = [];

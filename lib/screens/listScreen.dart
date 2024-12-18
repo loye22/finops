@@ -263,7 +263,7 @@ class _listScreenState extends State<listScreen> {
                   icon: Icons.directions_car,
                   color: Colors.orange,
                   onTap: () {
-                    widget.openTabCallback('Model Vehicul', ModelVehicul());
+                    widget.openTabCallback('Model Vehicul', VehicleModelUI());
                   },
                 ),
                 gridItem(

@@ -1,5 +1,5 @@
 import 'package:finops/models/staticVar.dart';
-import 'package:finops/provider/OperationTypeProvider.dart';
+import 'package:finops/provider/botLVL/OperationTypeProvider.dart';
 import 'package:finops/widgets/CustomTextField.dart';
 import 'package:finops/widgets/ErrorDialog.dart';
 import 'package:finops/widgets/customButton.dart';
