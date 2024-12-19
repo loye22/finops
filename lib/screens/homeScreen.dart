@@ -1,7 +1,7 @@
 import 'package:finops/models/staticVar.dart';
 import 'package:finops/screens/adaugaFacturi.dart';
 import 'package:finops/screens/listScreen.dart';
-import 'package:finops/screens/midLVL/entities.dart';
+import 'package:finops/screens/midLVL/entitiesMidLVL.dart';
 import 'package:finops/widgets/alertsWidget.dart';
 import 'package:finops/widgets/notidicationsAnimationIcon.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,6 +10,8 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_admin_scaffold/admin_scaffold.dart';
 import 'package:tabbed_view/tabbed_view.dart';
+
+import 'botLVL/ModelVehicul.dart';
 
 class homeScreen extends StatefulWidget {
   const homeScreen({super.key});
@@ -69,7 +71,7 @@ class _homeScreenState extends State<homeScreen> {
   @override
   Widget build(BuildContext context) {
     /// test
-    openTab("tabTitle", TabBarExample());
+    openTab("tabTitle", entitiesMidLVL());
 
     TabbedView tabbedView = TabbedView(
       controller: _controller,

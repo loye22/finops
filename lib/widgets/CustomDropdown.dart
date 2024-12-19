@@ -11,6 +11,10 @@ class CustomDropdown extends FormField<String> {
   final IconData hintIcon;
   final VoidCallback onAddNewItemPressed;
   final String lable ;
+  final GlobalKey<DropdownButton2State>? dropdownKey; // Accept GlobalKey as parameter
+
+
+
 
   CustomDropdown({
     Key? key,
@@ -22,7 +26,8 @@ class CustomDropdown extends FormField<String> {
     required this.textEditingController,
     required this.onAddNewItemPressed,
     FormFieldValidator<String>? validator,
-    required this.lable
+    required this.lable,
+    this.dropdownKey
   }) : super(
           key: key,
           initialValue: selectedValue,
@@ -62,6 +67,7 @@ class CustomDropdown extends FormField<String> {
                             double screenWidth = MediaQuery.of(context).size.width;
 
                             return DropdownButton2<String>(
+                              key: dropdownKey,
                               dropdownStyleData: DropdownStyleData(
                                 decoration: BoxDecoration(color: Colors.white),
                                 maxHeight: 200,

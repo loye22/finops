@@ -1,7 +1,9 @@
 // vehicle_model_ui.dart
 
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:finops/provider/botLVL/VehicleBrandProvider.dart';
 import 'package:finops/provider/botLVL/VehicleModelProvider.dart';
+import 'package:finops/screens/botLVL/VehicleBrandUI.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -110,12 +112,16 @@ class AddVehicleModelDialog extends StatefulWidget {
   State<AddVehicleModelDialog> createState() => _AddVehicleModelDialogState();
 }
 
-class _AddVehicleModelDialogState extends State<AddVehicleModelDialog>  {
+class _AddVehicleModelDialogState extends State<AddVehicleModelDialog> {
   TextEditingController vehicleModelController = TextEditingController();
   TextEditingController searchController = TextEditingController();
   String? selectedVehicleBrand;
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
+
+  final GlobalKey<DropdownButton2State> dropdownKey = GlobalKey<DropdownButton2State>();
+
+
 
   void _submitForm() {
     if (_formKey.currentState?.validate() ?? false) {
@@ -148,23 +154,21 @@ class _AddVehicleModelDialogState extends State<AddVehicleModelDialog>  {
 
   @override
   Widget build(BuildContext context) {
-    final vehicleBrandProvider =
-        Provider.of<VehicleBrandProvider>(context);
+    final vehicleBrandProvider = Provider.of<VehicleBrandProvider>(context);
 
     return Dialog(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            child: Container(
-              width: staticVar.fullWidth(context) * .4,
-              height: staticVar.fullhigth(context) * .4,
-              padding: const EdgeInsets.all(16.0),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: !vehicleBrandProvider.hasData
-                  ? staticVar.loading()
-                  : Form(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      child: Container(
+        width: staticVar.fullWidth(context) * .4,
+        height: staticVar.fullhigth(context) * .4,
+        padding: const EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: !vehicleBrandProvider.hasData
+            ? staticVar.loading()
+            : Form(
                 key: _formKey,
                 child: Column(
                   children: [
@@ -180,6 +184,7 @@ class _AddVehicleModelDialogState extends State<AddVehicleModelDialog>  {
                       },
                     ),
                     CustomDropdown(
+
                       items: vehicleBrandProvider.vehicleBrandList
                           .map((e) => e.vehicle_brand)
                           .toList(),
@@ -192,15 +197,12 @@ class _AddVehicleModelDialogState extends State<AddVehicleModelDialog>  {
                           selectedVehicleBrand = value;
                         });
                       },
-                      onAddNewItemPressed: () {
+                      onAddNewItemPressed: ()  {
                         // Handle add new vehicle brand
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                                'Funcționalitate Adăugare Marca încă nu e implementată.'),
-                            backgroundColor: Colors.orangeAccent,
-                          ),
-                        );
+                        showVehicleBrandDialog(context);
+
+
+
                       },
                     ),
                     Row(
@@ -228,7 +230,16 @@ class _AddVehicleModelDialogState extends State<AddVehicleModelDialog>  {
                   ],
                 ),
               ),
-            ),
-          );
+      ),
+    );
+  }
+
+  void showVehicleBrandDialog(BuildContext context) async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AddVehicleBrandDialog();
+      },
+    );
   }
 }
