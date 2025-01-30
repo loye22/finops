@@ -23,6 +23,8 @@ import 'package:finops/provider/botLVL/VehicleBrandProvider.dart';
 import 'package:finops/provider/botLVL/VehicleModelProvider.dart';
 import 'package:finops/provider/botLVL/VehicleRegistrationNumberProvider.dart';
 import 'package:finops/provider/botLVL/VehicleYearProvider.dart';
+import 'package:finops/provider/midLVL/BankAccountProvider.dart';
+import 'package:finops/provider/midLVL/EntityDataProvider.dart';
 import 'package:finops/screens/homeScreen.dart';
 import 'package:finops/screens/loginScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -51,6 +53,7 @@ Future<void> main() async {
   );
   await Firebase.initializeApp();
   runApp(MultiProvider(providers: [
+    // Bottom LVL providers
     ChangeNotifierProvider(create: (context) => OperationTypeProvider()),
     ChangeNotifierProvider(create: (context) => DocumentProvider()),
     ChangeNotifierProvider(create: (context) => EntityTypeProvider()),
@@ -79,6 +82,11 @@ Future<void> main() async {
     ChangeNotifierProvider(create: (context) => VehicleYearProvider()),
     ChangeNotifierProvider(create: (context) => FuelTypeProvider()),
     ChangeNotifierProvider(create: (context) => VehicleModelProvider()),
+    // Mod LVL providers
+    ChangeNotifierProvider(create: (context) => BankAccountProvider()),
+    ChangeNotifierProvider(create: (context) => EntityProvider(Provider.of<BankAccountProvider>(context, listen: false))),
+
+
   ], child: MyApp()));
 }
 

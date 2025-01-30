@@ -97,6 +97,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.2"
+  cross_file:
+    dependency: transitive
+    description:
+      name: cross_file
+      sha256: "7caf6a750a0c04effbb52a676dce9a4a592e10ad35c34d6d2d0e4811160d5670"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.4+2"
   crypto:
     dependency: transitive
     description:
@@ -161,6 +169,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.0.1"
+  file_picker:
+    dependency: "direct main"
+    description:
+      name: file_picker
+      sha256: c904b4ab56d53385563c7c39d8e9fa9af086f91495dfc48717ad84a42c3cf204
+      url: "https://pub.dev"
+    source: hosted
+    version: "8.1.7"
   firebase_auth:
     dependency: "direct main"
     description:
@@ -226,10 +242,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_admin_scaffold
-      sha256: b36f5a36242153c3d76805bf07543c55c932cb4c2ead175dfd3604616172d2cc
+      sha256: ac8dc3845de994f68995440da7f7f2ff2fb7386165bbe9d3a4c984424bd3aabc
       url: "https://pub.dev"
     source: hosted
-    version: "1.3.0"
+    version: "1.4.0"
   flutter_animate:
     dependency: "direct main"
     description:
@@ -246,6 +262,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.0"
+  flutter_plugin_android_lifecycle:
+    dependency: transitive
+    description:
+      name: flutter_plugin_android_lifecycle
+      sha256: "615a505aef59b151b46bbeef55b36ce2b6ed299d160c51d84281946f0aa0ce0e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.24"
   flutter_shaders:
     dependency: transitive
     description:
@@ -392,6 +416,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.2"
+  platform_file:
+    dependency: "direct main"
+    description:
+      name: platform_file
+      sha256: d912d639788cec2006c4f58bc799daac4cb07fa606baa2219db4f14078c313dc
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.0"
   plugin_platform_interface:
     dependency: transitive
     description:

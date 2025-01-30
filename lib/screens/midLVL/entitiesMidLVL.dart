@@ -1,129 +1,126 @@
+import 'package:finops/models/midLVL/EntityDataModel/transactionTabDataModel.dart';
 import 'package:finops/models/staticVar.dart';
+import 'package:finops/provider/midLVL/EntityDataProvider.dart';
+import 'package:finops/widgets/CustomDropdown.dart';
 import 'package:finops/widgets/CustomTextField.dart';
+import 'package:finops/widgets/EntityInfoCard.dart';
+import 'package:finops/widgets/ErrorDialog.dart';
 import 'package:finops/widgets/customButton.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-import '../../widgets/CustomDropdown.dart';
-
 class entitiesMidLVL extends StatefulWidget {
+  const entitiesMidLVL({super.key});
+
   @override
-  _entitiesMidLVLState createState() => _entitiesMidLVLState();
+  State<entitiesMidLVL> createState() => _entitiesMidLVLState();
 }
 
-class _entitiesMidLVLState extends State<entitiesMidLVL>
-    with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 4, vsync: this);
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
-
+class _entitiesMidLVLState extends State<entitiesMidLVL> {
   final DataGridController _dataGridController = DataGridController();
-  final EntityDataSource _entityDataSource = EntityDataSource();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       floatingActionButton: FloatingActionButton(
-        tooltip: 'Adaugă Tip Operațiune',
+        tooltip: 'Adaugă Entitate',
         backgroundColor: staticVar.themeColor,
         onPressed: () async {
-          popupexample(context);
+          showEntityDialog(context);
         },
         child: Icon(
           Icons.add,
           color: Colors.white,
         ),
       ),
-      backgroundColor: Color(0xFFF8F8FA),
       body: Row(
         children: [
           Container(
-            width: staticVar.fullWidth(context) * .65,
-            height: staticVar.fullhigth(context),
-            child: SfDataGridTheme(
-              data: SfDataGridThemeData(headerColor: const Color(0xffEFF2F9)),
-              child: SfDataGrid(
-                controller: _dataGridController,
-                allowSorting: true,
-                allowFiltering: true,
-                columnWidthMode: ColumnWidthMode.fill,
-                source: _entityDataSource,
-                columns: <GridColumn>[
-                  GridColumn(
-                    columnName: 'select',
-                    label: Container(
-                      padding: EdgeInsets.all(8.0),
-                      alignment: Alignment.center,
-                      child: Text('Select'),
-                    ),
-                    width: 60, // Adjust width for checkbox
-                  ),
-                  GridColumn(
-                    columnName: 'denumireEntitate',
-                    label: Container(
-                      padding: EdgeInsets.all(8.0),
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Denumire Entitate',
-                        style: TextStyle(fontWeight: FontWeight.bold),
+            width: staticVar.fullWidth(context) * .55,
+            child: Consumer<EntityProvider>(
+              builder: (context, entityProvider, _) {
+                // Check for errors and display the error dialog
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (entityProvider.errorMessage != null) {
+                    showDialog(
+                      context: context,
+                      builder: (context) => ErrorDialog(
+                        errorMessage: entityProvider.errorMessage!,
                       ),
-                    ),
-                  ),
-                  GridColumn(
-                    columnName: 'cui',
-                    label: Container(
-                      padding: EdgeInsets.all(8.0),
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'CUI',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                  GridColumn(
-                    columnName: 'iban',
-                    label: Container(
-                      padding: EdgeInsets.all(8.0),
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'IBAN',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                  GridColumn(
-                    columnName: 'asocieri',
-                    label: Container(
-                      padding: EdgeInsets.all(8.0),
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Asocieri',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                    ).then((_) {
+                      entityProvider.clearError();
+                    });
+                  }
+                  if (entityProvider.successMessage != null) {
+                    Future.delayed(Duration.zero, () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            entityProvider.successMessage!,
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          backgroundColor: Colors.greenAccent,
+                        ),
+                      );
+                      entityProvider.clearSuccessMessage();
+                    });
+                  }
+                });
+
+                return !entityProvider.hasData
+                    ? staticVar.loading()
+                    : SfDataGrid(
+                        controller: _dataGridController,
+                        allowSorting: true,
+                        allowFiltering: true,
+                        columnWidthMode: ColumnWidthMode.fill,
+                        source: entityProvider.entityDataSource,
+                        columns: <GridColumn>[
+                          GridColumn(
+                            columnName: 'denumireEntitate',
+                            label: Container(
+                              alignment: Alignment.center,
+                              child: Text('Denumire Entitate'),
+                            ),
+                          ),
+                          GridColumn(
+                            columnName: 'cui',
+                            label: Container(
+                              alignment: Alignment.center,
+                              child: Text('CUI'),
+                            ),
+                          ),
+                          GridColumn(
+                            columnName: 'iban',
+                            label: Container(
+                              alignment: Alignment.center,
+                              child: Text('IBAN'),
+                            ),
+                          ),
+
+                        ],
+                      );
+              },
             ),
           ),
           Expanded(
             child: Column(
               children: [
+                EntityInfoCard(
+                  entityName: 'MEDIAFLOW PUBLIC RELATIONS',
+                  cui: '45135547',
+                  regCom: 'J40/18626/2021',
+                  adresa: 'Bdul. Decebal 12 B',
+                  alertCount: 13,
+                ),
+
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
-                    height: staticVar.fullhigth(context) * .5,
+                    height: staticVar.fullhigth(context) * .65,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       // Background color
@@ -135,7 +132,7 @@ class _entitiesMidLVLState extends State<entitiesMidLVL>
                       ),
                     ),
                     child: DefaultTabController(
-                      length: 4,
+                      length: 5,
                       child: Column(
                         children: [
                           Container(
@@ -153,10 +150,11 @@ class _entitiesMidLVLState extends State<entitiesMidLVL>
                               unselectedLabelColor: Colors.grey,
                               // Inactive label color
                               tabs: [
-                                Tab(text: 'Operatiuni'),
                                 Tab(text: 'Tranzactii'),
+                                Tab(text: 'Operatiuni'),
                                 Tab(text: 'Documente'),
-                                Tab(text: 'Detalii'),
+                                Tab(text: 'Conturi Bancare'),
+                                Tab(text: 'Rapoarte'),
                               ],
                             ),
                           ),
@@ -165,10 +163,70 @@ class _entitiesMidLVLState extends State<entitiesMidLVL>
                               padding: EdgeInsets.all(16),
                               child: TabBarView(
                                 children: [
-                                  Center(child: Text('Operatiuni Content')),
+                                  SfDataGridTheme(
+                                    data: SfDataGridThemeData(
+                                      sortIconColor: Colors.white,
+                                        headerColor: const Color(0xff38383A),
+                                        filterIconColor: Colors.white),
+                                    child: SfDataGrid(
+                                      controller: _dataGridController,
+                                      allowSorting: true,
+                                      allowFiltering: true,
+                                      columnWidthMode: ColumnWidthMode.fill,
+                                      source: TransactionTabDataSource(
+                                          transactions: generateDummyData()),
+                                      columns: <GridColumn>[
+                                        GridColumn(
+                                          columnName: 'data',
+                                          label: Container(
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                              'Data',
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                        GridColumn(
+                                          columnName: 'suma',
+                                          label: Container(
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                              'Suma',
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                        GridColumn(
+                                          columnName: 'platitor',
+                                          label: Container(
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                              'Platitor',
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                        GridColumn(
+                                          columnName: 'beneficiar',
+                                          label: Container(
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                              'Beneficiar',
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                   Center(child: Text('Tranzactii Content')),
                                   Center(child: Text('Documente Content')),
-                                  Center(child: Text('Detalii Content')),
+                                  Center(child: Text('Documente Content')),
+                                  Center(child: Text('Documente Content')),
                                 ],
                               ),
                             ),
@@ -178,64 +236,64 @@ class _entitiesMidLVLState extends State<entitiesMidLVL>
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    height: staticVar.fullhigth(context) * .3,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      // Background color
-                      borderRadius: BorderRadius.circular(10),
-                      // 10-radius curve
-                      border: Border.all(
-                        color: Colors.grey, // Grey border
-                        width: 2.0,
-                      ),
-                    ),
-                    child: DefaultTabController(
-                      length: 4,
-                      child: Column(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              // White background for TabBar
-                              borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(10)),
-                            ),
-                            child: TabBar(
-                              indicatorColor: staticVar.themeColor,
-                              // Tab indicator color
-                              labelColor: Colors.black,
-                              // Active label color
-                              unselectedLabelColor: Colors.grey,
-                              // Inactive label color
-                              tabs: [
-                                Tab(text: 'Operatiuni'),
-                                Tab(text: 'Tranzactii'),
-                                Tab(text: 'Documente'),
-                                Tab(text: 'Detalii'),
-                              ],
-                            ),
-                          ),
-                          Expanded(
-                            child: Container(
-                              padding: EdgeInsets.all(16),
-                              child: TabBarView(
-                                children: [
-                                  Center(child: Text('Operatiuni Content')),
-                                  Center(child: Text('Tranzactii Content')),
-                                  Center(child: Text('Documente Content')),
-                                  Center(child: Text('Detalii Content')),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.all(8.0),
+                //   child: Container(
+                //     height: staticVar.fullhigth(context) * .3,
+                //     decoration: BoxDecoration(
+                //       color: Colors.white,
+                //       // Background color
+                //       borderRadius: BorderRadius.circular(10),
+                //       // 10-radius curve
+                //       border: Border.all(
+                //         color: Colors.grey, // Grey border
+                //         width: 2.0,
+                //       ),
+                //     ),
+                //     child: DefaultTabController(
+                //       length: 4,
+                //       child: Column(
+                //         children: [
+                //           Container(
+                //             decoration: BoxDecoration(
+                //               color: Colors.white,
+                //               // White background for TabBar
+                //               borderRadius: BorderRadius.vertical(
+                //                   top: Radius.circular(10)),
+                //             ),
+                //             child: TabBar(
+                //               indicatorColor: staticVar.themeColor,
+                //               // Tab indicator color
+                //               labelColor: Colors.black,
+                //               // Active label color
+                //               unselectedLabelColor: Colors.grey,
+                //               // Inactive label color
+                //               tabs: [
+                //                 Tab(text: 'Operatiuni'),
+                //                 Tab(text: 'Tranzactii'),
+                //                 Tab(text: 'Documente'),
+                //                 Tab(text: 'Detalii'),
+                //               ],
+                //             ),
+                //           ),
+                //           Expanded(
+                //             child: Container(
+                //               padding: EdgeInsets.all(16),
+                //               child: TabBarView(
+                //                 children: [
+                //                   Center(child: Text('Operatiuni Content')),
+                //                   Center(child: Text('Tranzactii Content')),
+                //                   Center(child: Text('Documente Content')),
+                //                   Center(child: Text('Detalii Content')),
+                //                 ],
+                //               ),
+                //             ),
+                //           ),
+                //         ],
+                //       ),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           )
@@ -244,15 +302,28 @@ class _entitiesMidLVLState extends State<entitiesMidLVL>
     );
   }
 
-  void popupexample(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AddEntityDialog();
-      },
-    );
+  // Generating dummy data for 20 rows
+  List<TransactionTabData> generateDummyData() {
+    return List<TransactionTabData>.generate(20, (index) {
+      return TransactionTabData(
+        data: '2025-01-0${index + 1}',
+        suma: '${(index + 1) * 100}.00 RON',
+        platitor: 'Platitor ${index + 1}',
+        beneficiar: 'Beneficiar ${index + 1}',
+      );
+    });
   }
 }
+
+void showEntityDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AddEntityDialog();
+    },
+  );
+}
+
 
 class DocumenteTab extends StatelessWidget {
   @override
@@ -296,69 +367,6 @@ class DocumenteTab extends StatelessWidget {
     );
   }
 }
-
-class EntityData {
-  final String denumireEntitate;
-  final String cui;
-  final String iban;
-  final String asocieri;
-
-  EntityData(this.denumireEntitate, this.cui, this.iban, this.asocieri);
-}
-
-class EntityDataSource extends DataGridSource {
-  final List<EntityData> _entities = List.generate(
-    100, // Change this number for more rows
-    (index) => EntityData(
-      'STAR OFFICE CENTER SRL',
-      '37624240',
-      'RO87RZBR0000060020026999',
-      index < 5 ? 'Septem, Furnizor, Client' : 'Septem, Ifigenia, Client',
-    ),
-  );
-
-  @override
-  List<DataGridRow> get rows => _entities
-      .map((data) => DataGridRow(cells: [
-            DataGridCell<String>(
-                columnName: 'denumireEntitate', value: data.denumireEntitate),
-            DataGridCell<String>(columnName: 'cui', value: data.cui),
-            DataGridCell<String>(columnName: 'iban', value: data.iban),
-            DataGridCell<String>(columnName: 'asocieri', value: data.asocieri),
-          ]))
-      .toList();
-
-  @override
-  DataGridRowAdapter buildRow(DataGridRow row) {
-    return DataGridRowAdapter(cells: [
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Checkbox(
-          value: false,
-          onChanged: (value) {},
-        ),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(row.getCells()[0].value),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(row.getCells()[1].value),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(row.getCells()[2].value),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(row.getCells()[3].value),
-      ),
-    ]);
-  }
-}
-
-//
 
 class AddEntityDialog extends StatefulWidget {
   @override
@@ -481,12 +489,14 @@ class _AddEntityDialogState extends State<AddEntityDialog> {
                                     entityTypeSwitches[key] = value;
                                   });
                                 },
-                                activeColor: staticVar.themeColor, // Active color
+                                activeColor:
+                                    staticVar.themeColor, // Active color
                               ),
                             ],
-                          ), Divider(
-                            color: Colors.grey,  // Gray underline
-                            thickness: 1.0,      // Thickness of the underline
+                          ),
+                          Divider(
+                            color: Colors.grey, // Gray underline
+                            thickness: 1.0, // Thickness of the underline
                           ),
                         ],
                       ),

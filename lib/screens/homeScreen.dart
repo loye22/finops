@@ -1,7 +1,6 @@
 import 'package:finops/models/staticVar.dart';
-import 'package:finops/screens/adaugaFacturi.dart';
 import 'package:finops/screens/listScreen.dart';
-import 'package:finops/screens/midLVL/entitiesMidLVL.dart';
+import 'package:finops/screens/topLVL/addOperation.dart';
 import 'package:finops/widgets/alertsWidget.dart';
 import 'package:finops/widgets/notidicationsAnimationIcon.dart';
 import 'package:flutter/cupertino.dart';
@@ -71,7 +70,7 @@ class _homeScreenState extends State<homeScreen> {
   @override
   Widget build(BuildContext context) {
     /// test
-    openTab("tabTitle", entitiesMidLVL());
+    openTab("tabTitle",addOperation() /*entitiesMidLVL()*/);
 
     TabbedView tabbedView = TabbedView(
       controller: _controller,
@@ -84,6 +83,10 @@ class _homeScreenState extends State<homeScreen> {
     );
 
     return AdminScaffold(
+        leadingIcon: Icon(
+          Icons.menu,
+          color: Colors.white,
+        ),
         backgroundColor: Colors.white,
         appBar: AppBar(
           // leadingWidth: 10,
@@ -171,7 +174,7 @@ class _homeScreenState extends State<homeScreen> {
                   icon: Icons.add_circle_outline,
                   // To indicate adding an operation
                   title: 'Adauga',
-                  route: '/screen2',
+                  route: 'addOperation',
                 ),
                 AdminMenuItem(
                   icon: Icons.visibility,
@@ -334,8 +337,8 @@ class _homeScreenState extends State<homeScreen> {
           selectedRoute: '/',
           onSelected: (item) {
             switch (item.title) {
-              case 'Adauga Facturi':
-                openTab('Adauga Facturi', adaugaFacturi());
+              case 'Adauga':
+                openTab('addOperation', addOperation());
                 break;
 
               case 'Liste':
