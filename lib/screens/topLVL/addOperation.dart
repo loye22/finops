@@ -1,6 +1,7 @@
 // addOperation.dart
 import 'package:file_picker/file_picker.dart';
 import 'package:finops/models/staticVar.dart';
+import 'package:finops/widgets/ErrorDialog.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
@@ -60,10 +61,13 @@ class _FileDisplayWidgetState extends State<FileDisplayWidget> {
     setState(() => _isLoading = true);
 
     try {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('new 2')));
       final result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['pdf', 'jpg', 'jpeg', 'png'],
       );
+
 
       if (result != null) {
         setState(() => _selectedFile = result.files.first);
@@ -148,3 +152,4 @@ class _FileDisplayWidgetState extends State<FileDisplayWidget> {
     );
   }
 }
+
