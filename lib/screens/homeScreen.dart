@@ -1,5 +1,6 @@
 import 'package:finops/models/staticVar.dart';
 import 'package:finops/screens/listScreen.dart';
+import 'package:finops/screens/midLVL/addDocumentsScreen.dart';
 import 'package:finops/screens/topLVL/addOperation.dart';
 import 'package:finops/widgets/alertsWidget.dart';
 import 'package:finops/widgets/notidicationsAnimationIcon.dart';
@@ -70,7 +71,7 @@ class _homeScreenState extends State<homeScreen> {
   @override
   Widget build(BuildContext context) {
     /// test
-    openTab("tabTitle",addOperation() /*entitiesMidLVL()*/);
+    openTab("tabTitle",addDocumentsScreen() /*entitiesMidLVL()*/);
 
     TabbedView tabbedView = TabbedView(
       controller: _controller,

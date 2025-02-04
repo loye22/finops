@@ -13,6 +13,8 @@ class DocumentProvider with ChangeNotifier {
   String? _errorMessage;
   String? _successMessage;
 
+  List<DocumentModel> get documentClassList => _documentsList;
+
   // Getter for error message
   String? get errorMessage => _errorMessage;
 

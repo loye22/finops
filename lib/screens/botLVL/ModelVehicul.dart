@@ -184,7 +184,6 @@ class _AddVehicleModelDialogState extends State<AddVehicleModelDialog> {
                       },
                     ),
                     CustomDropdown(
-
                       items: vehicleBrandProvider.vehicleBrandList
                           .map((e) => e.vehicle_brand)
                           .toList(),

@@ -24,6 +24,7 @@ import 'package:finops/provider/botLVL/VehicleModelProvider.dart';
 import 'package:finops/provider/botLVL/VehicleRegistrationNumberProvider.dart';
 import 'package:finops/provider/botLVL/VehicleYearProvider.dart';
 import 'package:finops/provider/midLVL/BankAccountProvider.dart';
+import 'package:finops/provider/midLVL/DocumentProvider.dart';
 import 'package:finops/provider/midLVL/EntityDataProvider.dart';
 import 'package:finops/screens/homeScreen.dart';
 import 'package:finops/screens/loginScreen.dart';
@@ -84,6 +85,7 @@ Future<void> main() async {
     ChangeNotifierProvider(create: (context) => VehicleModelProvider()),
     // Mod LVL providers
     ChangeNotifierProvider(create: (context) => BankAccountProvider()),
+    ChangeNotifierProvider(create: (context) => DocumentProviderMidLvl()),
     ChangeNotifierProvider(create: (context) => EntityProvider(Provider.of<BankAccountProvider>(context, listen: false))),
 
 

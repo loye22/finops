@@ -3,11 +3,11 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 class EntityData {
   final String EntitateName;
-  final String cui;
+  final String entity_id;
   final String iban;
 
 
-  EntityData({required this.EntitateName,required this.cui,required this.iban});
+  EntityData({required this.EntitateName,required this.entity_id,required this.iban});
 }
 
 class EntityDataSource extends DataGridSource {
@@ -19,7 +19,7 @@ class EntityDataSource extends DataGridSource {
       ),
       DataGridCell<String>(
         columnName: 'cui',
-        value: entity.cui,
+        value: entity.entity_id,
       ),
       DataGridCell<String>(
         columnName: 'iban',

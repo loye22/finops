@@ -63,7 +63,7 @@ class EntityProvider with ChangeNotifier {
         for (var item in data) {
           entityListHelper.add(EntityData(
             EntitateName: item['entity_name'] ,
-            cui: item['entity_id'],
+            entity_id: item['entity_id'],
             iban: _bankAccountProvider.getIbanByOwnerId(item['entity_id']),
 
           ));

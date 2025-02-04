@@ -10,6 +10,7 @@ class CustomTextField extends FormField<String> {
   final IconData hintIcon;
   final String label;
   final int? maxChar;
+  bool optional;
 
   final bool numbersOnly;
 
@@ -23,11 +24,16 @@ class CustomTextField extends FormField<String> {
       FormFieldValidator<String>? validator,
       required this.label,
       this.maxChar = 30,
-      this.numbersOnly = false})
+      this.numbersOnly = false ,
+      this.optional = false
+      })
       : super(
           key: key,
           initialValue: selectedValue,
           validator: (value) {
+            if (optional){
+              return null ;
+            }
             if (value == null || value.trim().isEmpty) {
               return "Te rog să introduci o valoare";
             }
