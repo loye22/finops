@@ -88,7 +88,7 @@ Future<void> main() async {
     ChangeNotifierProvider(create: (context) => DocumentProviderMidLvl()),
     ChangeNotifierProvider(create: (context) => EntityProvider(Provider.of<BankAccountProvider>(context, listen: false))),
 
-
+// new coment
   ], child: MyApp()));
 }
 
