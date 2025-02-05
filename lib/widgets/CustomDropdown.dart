@@ -78,12 +78,14 @@ class CustomDropdown extends FormField<String> {
                                 children: [
                                   hintIcon == Icons.category ? SizedBox.shrink() :  Icon(hintIcon),
                                   SizedBox(width: 8),
-                                  Text(
-                                    hint!,
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.grey,
-                                      fontWeight: FontWeight.bold,
+                                  Flexible(
+                                    child: Text(
+                                      hint!,
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
                                 ],

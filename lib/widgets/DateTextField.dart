@@ -47,9 +47,9 @@ class DateTextField extends FormField<String> {
                     String formattedDate =
                         "${selectedDate.year}-${selectedDate.month.toString().padLeft(2, '0')}-${selectedDate.day.toString().padLeft(2, '0')}";
                     textEditingController.text = formattedDate;
-                    state.didChange(formattedDate);
+                    state.didChange(selectedDate.millisecondsSinceEpoch.toString() /*formattedDate*/);
                     if (onChanged != null) {
-                      onChanged!(formattedDate);
+                      onChanged!(selectedDate.millisecondsSinceEpoch.toString()/*formattedDate*/);
                     }
                   }
                 },

@@ -4,6 +4,7 @@ import 'package:finops/models/staticVar.dart';
 import 'package:finops/screens/botLVL/DocumentTypeUI.dart';
 import 'package:finops/widgets/DateTextField.dart';
 import 'package:finops/widgets/ErrorDialog.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -11,6 +12,7 @@ import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 import '../../provider/botLVL/DocumentClassProvider.dart';
 import '../../provider/botLVL/DocumentProvider.dart';
+import '../../provider/midLVL/DocumentProvider.dart';
 import '../../provider/midLVL/EntityDataProvider.dart';
 import '../../widgets/CustomDropdown.dart';
 import '../../widgets/CustomTextField.dart';
@@ -40,42 +42,55 @@ class _addDocumentsScreenState extends State<addDocumentsScreen> {
 
   String? selectedDocumentClass;
   String? selectedDocumentType;
-  String? selectedDocumentCategory;
   String? selectedBeneficiar;
   String? selectedPartener;
+  String? startDateTimeStamp;
 
-  void _submitForm() {
-    if (_formKey.currentState?.validate() ?? false) {
-      final documentName = documentNameController.text.trim();
-      final documentClass = selectedDocumentClass;
-      final documentType = selectedDocumentType;
-      final documentCategory = selectedDocumentCategory;
+  String? endsDateTimeStamp;
 
-      if (documentClass == null ||
-          documentType == null ||
-          documentCategory == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Please select all required fields.'),
-            backgroundColor: Colors.redAccent,
-          ),
-        );
-        return;
-      }
-
-      // Handle form submission logic
-      print('Document Name: $documentName');
-      print('Document Class: $documentClass');
-      print('Document Type: $documentType');
-      print('Document Category: $documentCategory');
-    }
-  }
+  PlatformFile? selectedFile;
 
   @override
   Widget build(BuildContext context) {
     final documentClassProvider = Provider.of<DocumentClassProvider>(context);
     final documentTypeProvider = Provider.of<DocumentProvider>(context);
     final EntityDataProvider = Provider.of<EntityProvider>(context);
+    final DocumentProviderMidLvlVar =
+        Provider.of<DocumentProviderMidLvl>(context);
+
+    Future<void> _submitForm() async {
+      if (_formKey.currentState?.validate() ?? false) {
+        if (selectedFile == null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Vă rugăm să selectați fișierul.'),
+              backgroundColor: Colors.redAccent,
+            ),
+          );
+          return;
+        }
+        Map<String, dynamic> documentData = {
+          "document_id": DateTime.now().millisecondsSinceEpoch.toString(),
+          "user_email": FirebaseAuth.instance.currentUser?.email ?? "NotFOUND",
+          "user_timestamp": DateTime.now().toString(),
+          "document_class": selectedDocumentClass,
+          "document_type": selectedDocumentType,
+          "document_file_url_flutter": "https://example.com/flutter_file.pdf",
+          "document_name":  documentNameController.text.trim(),
+          "document_number": documentNumberController.text,
+          "document_series": documentSeriesController.text,
+          "issuer_id": "Yes",
+          "beneficiary_id": selectedBeneficiar ?? "Not selected",
+          "partner_id": selectedPartener ?? "Not selected",
+          "date_start":startDateTimeStamp ,
+          "date_end": endsDateTimeStamp,
+          "date_start_aux": startDate.text,
+          "date_end_aux": endsDate.text
+        };
+        await DocumentProviderMidLvlVar.addDocument(documentData);
+
+      }
+    }
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -202,15 +217,37 @@ class _addDocumentsScreenState extends State<addDocumentsScreen> {
                       },
                     ),
                     DateTextField(
+                        onChanged: (start) {
+                          startDateTimeStamp = start;
+                        },
                         textEditingController: startDate,
                         label: "Data Inceput"),
                     DateTextField(
+                        onChanged: (end) {
+                          endsDateTimeStamp = end;
+                        },
                         textEditingController: endsDate,
                         label: "Data Sfarsit"),
-                    SizedBox(height: 400),
-                    ElevatedButton(
-                      onPressed: _submitForm,
-                      child: Text("Submit"),
+                    SizedBox(
+                      height: 100,
+                    ),
+                    Row(
+                      children: [
+                        CustomButton(
+                          title: "Trimite",
+                          backgroundColor: staticVar.themeColor,
+                          textColor: Colors.white,
+                          onPressed: _submitForm,
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        CustomButton(
+                            title: "print",
+                            backgroundColor: staticVar.themeColor,
+                            textColor: Colors.white,
+                            onPressed: _printFormData),
+                      ],
                     ),
                   ],
                 ),
@@ -221,6 +258,7 @@ class _addDocumentsScreenState extends State<addDocumentsScreen> {
                 padding: const EdgeInsets.all(16.0),
                 child: FileDisplayWidget(
                   onFileUploaded: (file) {
+                    selectedFile = file;
                     print('File uploaded: ${file.name}');
                   },
                 ),
@@ -230,6 +268,35 @@ class _addDocumentsScreenState extends State<addDocumentsScreen> {
         ),
       ),
     );
+  }
+
+  void _printFormData() {
+    // Collect data from the form fields and dropdowns
+    String documentName = documentNameController.text;
+    String documentNumber = documentNumberController.text;
+    String documentSeries = documentSeriesController.text;
+    String startDateValue = startDate.text;
+    String endDateValue = endsDate.text;
+
+    String documentClass = selectedDocumentClass ?? "Not selected";
+    String documentType = selectedDocumentType ?? "Not selected";
+    String beneficiar = selectedBeneficiar ?? "Not selected";
+    String partener = selectedPartener ?? "Not selected";
+
+    // Print the data to the console
+    print('Document Name: $documentName');
+    print('Document Number: $documentNumber');
+    print('Document Series: $documentSeries');
+    print('Start Date: $startDateValue');
+    print('End Date: $endDateValue');
+
+    print('Start Date time stamp : $startDateTimeStamp');
+    print('End Date time stamp : $endsDateTimeStamp');
+
+    print('Document Class: $documentClass');
+    print('Document Type: $documentType');
+    print('Beneficiar: $beneficiar');
+    print('Partener: $partener');
   }
 
   void showVehicleBrandDialog(BuildContext context) async {

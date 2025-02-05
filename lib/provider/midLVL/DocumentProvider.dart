@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:finops/models/staticVar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -77,11 +78,13 @@ class DocumentProviderMidLvl with ChangeNotifier {
 
   Future<void> addDocument(Map<String, dynamic> data) async {
     try {
+      print("adding ");
       final url = staticVar.urlAPI  +  'documents/Action';  // Replace with your API endpoint.
       final headers = {
         'ApplicationAccessKey': 'V2-HPwgN-t1nZA-pHXjA-5UBkc-NAVkh-vRq9F-zPDFW-WMFY1', // Replace with your key.
         'Content-Type': 'application/json',
       };
+      User? user = FirebaseAuth.instance.currentUser;
       final body = jsonEncode({
         "Action": "Add",
         "Rows": [data]
@@ -89,6 +92,9 @@ class DocumentProviderMidLvl with ChangeNotifier {
 
       final response = await http.post(Uri.parse(url), headers: headers, body: body);
 
+      print("response.statusCode");
+      print(response.statusCode);
+      return;
       if (response.statusCode == 200) {
         DocumentModelMidLvl newDocument = DocumentModelMidLvl(
           documentId: data['document_id'],
@@ -114,6 +120,7 @@ class DocumentProviderMidLvl with ChangeNotifier {
         throw Exception("Failed to add document. ${response.body}");
       }
     } catch (e) {
+      print(e);
       _errorMessage = e.toString();
       notifyListeners();
     }
